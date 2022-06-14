@@ -5,7 +5,7 @@ import {bloggersRouter} from "./routes/bloggers-router";
 import {postsRouter} from "./routes/posts-router";
 
 const app = express()
-const port = process.env.PORT || 3003
+const port = process.env.PORT || 5000
 app.use(cors())
 const parserMiddleware = bodyParser.json()
 app.use(parserMiddleware)
