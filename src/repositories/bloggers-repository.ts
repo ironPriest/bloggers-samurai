@@ -6,49 +6,21 @@ export let bloggers = [
     {id: 5, name: 'Andrew', youtubeUrl: 'someURL5'}
 ]
 
+export type bloggersType = {
+    id: number,
+    name: string,
+    youtubeUrl: string
+} | undefined
+
 export const bloggersRepository = {
-    getBloggers() {
+    async getBloggers(): Promise<bloggersType[]> {
         return bloggers
     },
-    getBloggerById(bloggerId: number) {
-        let blogger = bloggers.find(p => p.id === bloggerId)
+    async getBloggerById(bloggerId: number): Promise<bloggersType> {
+        let blogger: bloggersType = bloggers.find(p => p.id === bloggerId)
         return blogger
     },
-    createBlogger(name: string, youtubeUrl: string) {
-        /*let name = name
-        let youtubeUrl = youtubeUrl
-        if ((!name || typeof name !== 'string' || !name.trim() || name.length > 15) && (!youtubeUrl || typeof youtubeUrl !== 'string' || youtubeUrl.length > 100 || !/^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/.test(youtubeUrl))) {
-            res.status(400).send({
-                errorsMessages: [{
-                    "message": "invalid value",
-                    "field": "youtubeUrl"
-                },
-                    {
-                        "message": "invalid value",
-                        "field": "name"
-                    }],
-                resultCode: 1
-            })
-            return
-        } else if (!name || typeof name !== 'string' || !name.trim() || name.length > 15) {
-            res.status(400).send({
-                errorsMessages: [{
-                    "message": "invalid value",
-                    "field": "name"
-                }],
-                resultCode: 1
-            })
-            return
-        } else if (!youtubeUrl || typeof youtubeUrl !== 'string' || youtubeUrl.length > 100 || !/^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/.test(youtubeUrl)) {
-            res.status(400).send({
-                errorsMessages: [{
-                    "message": "invalid value",
-                    "field": "youtubeUrl"
-                }],
-                "resultCode": 1
-            })
-            return
-        } else {*/
+    async createBlogger(name: string, youtubeUrl: string): Promise<bloggersType> {
             const newBlogger = {
                 id: +(new Date()),
                 name: name,
@@ -56,49 +28,13 @@ export const bloggersRepository = {
             }
             bloggers.push(newBlogger)
             return newBlogger
-        /*}*/
     },
-    updateBlogger(bloggerId: number, name: string, youtubeUrl: string) {
+    async updateBlogger(bloggerId: number, name: string, youtubeUrl: string): Promise<boolean> {
         let blogger = bloggers.find(p => p.id === bloggerId)
         if (blogger) {
-            /*let name = req.body.name
-            let youtubeUrl = req.body.youtubeUrl
-            if ((!name || typeof name !== 'string' || !name.trim() || name.length > 15) && (!youtubeUrl || typeof youtubeUrl !== 'string' || youtubeUrl.length > 100 || !/^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/.test(youtubeUrl))) {
-                res.status(400).send({
-                    errorsMessages: [{
-                        "message": "invalid value",
-                        "field": "youtubeUrl"
-                    },
-                        {
-                            "message": "invalid value",
-                            "field": "name"
-                        }],
-                    resultCode: 1
-                })
-                return
-            } else if (!name || typeof name !== 'string' || !name.trim() || name.length > 15) {
-                res.status(400).send({
-                    errorsMessages: [{
-                        "message": "invalid value",
-                        "field": "name"
-                    }],
-                    "resultCode": 1
-                })
-                return
-            } else if (!youtubeUrl || typeof youtubeUrl !== 'string' || youtubeUrl.length > 100 || !/^https:\/\/([a-zA-Z0-9_-]+\.)+[a-zA-Z0-9_-]+(\/[a-zA-Z0-9_-]+)*\/?$/.test(youtubeUrl)) {
-                res.status(400).send({
-                    errorsMessages: [{
-                        "message": "invalid value",
-                        "field": "youtubeUrl"
-                    }],
-                    "resultCode": 1
-                })
-                return
-            } else {*/
                 blogger.name = name
                 blogger.youtubeUrl = youtubeUrl
                 return true
-            /*}*/
         } else {
             return false
         }

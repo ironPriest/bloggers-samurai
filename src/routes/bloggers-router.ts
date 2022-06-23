@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response, Router} from "express";
-import {bloggersRepository} from "../repositories/bloggers-repository";
+import {bloggersRepository, bloggersType} from "../repositories/bloggers-repository";
 import {body, validationResult} from "express-validator";
 import {
     contentChecker,
@@ -26,12 +26,12 @@ const youtubeUrlValidation = body('youtubeUrl')
     .isLength({max: 100})
     .matches('^https://([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$')
 
-bloggersRouter.get('/', (req: Request, res: Response ) => {
-    const bloggers = bloggersRepository.getBloggers()
+bloggersRouter.get('/', async(req: Request, res: Response) => {
+    const bloggers: bloggersType[] = await bloggersRepository.getBloggers()
     res.send(bloggers)
 })
-bloggersRouter.get('/:bloggerId', (req: Request, res: Response) => {
-    let blogger = bloggersRepository.getBloggerById(+req.params.bloggerId)
+bloggersRouter.get('/:bloggerId', async(req: Request, res: Response) => {
+    let blogger: bloggersType = await bloggersRepository.getBloggerById(+req.params.bloggerId)
     if (blogger) {
         res.send(blogger)
     } else {
@@ -43,8 +43,8 @@ bloggersRouter.post('/',
     nameValidation,
     youtubeUrlValidation,
     inputValidationMiddleware,
-    (req: Request, res: Response) => {
-    const newBlogger = bloggersRepository.createBlogger(req.body.name, req.body.youtubeUrl)
+    async(req: Request, res: Response) => {
+    const newBlogger: bloggersType = await bloggersRepository.createBlogger(req.body.name, req.body.youtubeUrl)
     res.status(201).send(newBlogger)
 })
 bloggersRouter.put('/:bloggerId',
@@ -52,8 +52,8 @@ bloggersRouter.put('/:bloggerId',
     nameValidation,
     youtubeUrlValidation,
     inputValidationMiddleware,
-    (req: Request, res: Response) => {
-    const isUpdated = bloggersRepository.updateBlogger(
+    async(req: Request, res: Response) => {
+    const isUpdated: boolean = await bloggersRepository.updateBlogger(
         +req.params.bloggerId,
         req.body.name,
         req.body.youtubeUrl)
