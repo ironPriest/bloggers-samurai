@@ -58,7 +58,7 @@ bloggersRouter.put('/:bloggerId',
         req.body.name,
         req.body.youtubeUrl)
     if (isUpdated) {
-        const blogger = bloggersRepository.getBloggerById(+req.params.bloggerId)
+        const blogger: bloggersType = await bloggersRepository.getBloggerById(+req.params.bloggerId)
         res.status(204).send(blogger)
     } else {
         res.send(404)
@@ -66,8 +66,8 @@ bloggersRouter.put('/:bloggerId',
 })
 bloggersRouter.delete('/:bloggerId',
     authMiddleware,
-    (req: Request, res: Response)=>{
-    const isDeleted = bloggersRepository.deleteBlogger(+req.params.bloggerId)
+    async(req: Request, res: Response)=>{
+    const isDeleted: boolean = await bloggersRepository.deleteBlogger(+req.params.bloggerId)
     if (isDeleted) {
         res.send(204)
     } else {

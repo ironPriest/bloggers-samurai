@@ -39,7 +39,7 @@ export const bloggersRepository = {
             return false
         }
     },
-    deleteBlogger(bloggerId: number) {
+    async deleteBlogger(bloggerId: number): Promise<boolean> {
         let blogger = bloggers.find(p => p.id === bloggerId)
         if (blogger) {
             bloggers = bloggers.filter((v) => v.id !== bloggerId)

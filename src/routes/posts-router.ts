@@ -1,5 +1,5 @@
 import {Request, Response, Router} from "express";
-import {postsRepository} from "../repositories/posts-repository";
+import {postsRepository, postType} from "../repositories/posts-repository";
 import {bloggersRepository} from "../repositories/bloggers-repository";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {body} from "express-validator";
@@ -26,12 +26,12 @@ const bloggerIdValidation = body('bloggerId')
     .isInt()
     .exists({checkFalsy: true})
 
-postsRouter.get('/', (req: Request, res: Response ) => {
-    const posts = postsRepository.getPosts()
+postsRouter.get('/', async(req: Request, res: Response ) => {
+    const posts: postType[] = await postsRepository.getPosts()
     res.send(posts)
 })
-postsRouter.get('/:postId', (req: Request, res: Response ) => {
-    const post = postsRepository.getPostById(+req.params.postId)
+postsRouter.get('/:postId', async(req: Request, res: Response ) => {
+    const post: postType = await postsRepository.getPostById(+req.params.postId)
     if (post) {
         res.send(post)
     } else {
@@ -45,8 +45,8 @@ postsRouter.post('/',
     contentValidation,
     bloggerIdValidation,
     inputValidationMiddleware,
-    (req: Request, res: Response) => {
-    const newPost = postsRepository.createPost(
+    async(req: Request, res: Response) => {
+    const newPost: postType = await postsRepository.createPost(
         req.body.title,
         req.body.shortDescription,
         req.body.content,
@@ -70,15 +70,15 @@ postsRouter.put('/:postId',
     contentValidation,
     bloggerIdValidation,
     inputValidationMiddleware,
-    (req: Request, res: Response) => {
-    const isUpdated = postsRepository.updatePost(
+    async(req: Request, res: Response) => {
+    const isUpdated: number = await postsRepository.updatePost(
         +req.params.postId,
         req.body.title,
         req.body.shortDescription,
         req.body.content,
         req.body.bloggerId)
     if (isUpdated === 2) {
-        const post = postsRepository.getPostById(+req.params.postId)
+        const post: postType = await postsRepository.getPostById(+req.params.postId)
         res.status(204).send(post)
     } else  if (isUpdated === 1) {
         res.status(400).json({
@@ -93,8 +93,8 @@ postsRouter.put('/:postId',
 })
 postsRouter.delete('/:postId',
     authMiddleware,
-    (req: Request, res: Response)=>{
-    const isDeleted = postsRepository.deletePost(+req.params.postId)
+    async(req: Request, res: Response)=>{
+    const isDeleted: boolean = await postsRepository.deletePost(+req.params.postId)
     if (isDeleted) {
         res.send(204)
     } else {
