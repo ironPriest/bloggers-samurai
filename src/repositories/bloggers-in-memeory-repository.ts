@@ -1,3 +1,5 @@
+import {bloggerDBType} from "./types";
+
 export let bloggers = [
     {id: 1, name: 'Mike', youtubeUrl: 'someURL1'},
     {id: 2, name: 'Bob', youtubeUrl: 'someURL2'},
@@ -6,21 +8,15 @@ export let bloggers = [
     {id: 5, name: 'Andrew', youtubeUrl: 'someURL5'}
 ]
 
-export type bloggersType = {
-    id: number,
-    name: string,
-    youtubeUrl: string
-} | undefined
-
 export const bloggersRepository = {
-    async getBloggers(): Promise<bloggersType[]> {
+    async getBloggers(): Promise<bloggerDBType[]> {
         return bloggers
     },
-    async getBloggerById(bloggerId: number): Promise<bloggersType> {
-        let blogger: bloggersType = bloggers.find(p => p.id === bloggerId)
+    async getBloggerById(bloggerId: number): Promise<bloggerDBType | undefined> {
+        let blogger: bloggerDBType | undefined= bloggers.find(p => p.id === bloggerId)
         return blogger
     },
-    async createBlogger(name: string, youtubeUrl: string): Promise<bloggersType> {
+    async createBlogger(name: string, youtubeUrl: string): Promise<bloggerDBType> {
             const newBlogger = {
                 id: +(new Date()),
                 name: name,

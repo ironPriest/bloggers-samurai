@@ -1,5 +1,5 @@
 import {NextFunction, Request, Response, Router} from "express";
-import {bloggersRepository, bloggersType} from "../repositories/bloggers-repository";
+import {bloggersRepository, bloggersType} from "../repositories/bloggers-db-repository";
 import {body, validationResult} from "express-validator";
 import {
     contentChecker,

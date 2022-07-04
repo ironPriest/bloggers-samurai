@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {postsRepository, postType} from "../repositories/posts-repository";
-import {bloggersRepository} from "../repositories/bloggers-repository";
+import {bloggersRepository} from "../repositories/bloggers-db-repository";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {body} from "express-validator";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
