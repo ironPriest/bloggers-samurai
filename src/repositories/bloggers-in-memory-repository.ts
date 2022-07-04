@@ -1,7 +1,5 @@
 //doesn't really need to be async
 
-import {bloggerDBType} from "./types";
-
 export let bloggers = [
     {id: 1, name: 'Mike', youtubeUrl: 'someURL1'},
     {id: 2, name: 'Bob', youtubeUrl: 'someURL2'},
@@ -11,14 +9,14 @@ export let bloggers = [
 ]
 
 export const bloggersRepository = {
-    async getBloggers() {
+    getBloggers() {
         return bloggers
     },
-    async getBloggerById(bloggerId: number) {
+    getBloggerById(bloggerId: number) {
         let blogger = bloggers.find(p => p.id === bloggerId)
         return blogger
     },
-    async createBlogger(name: string, youtubeUrl: string) {
+    createBlogger(name: string, youtubeUrl: string) {
             const newBlogger = {
                 id: +(new Date()),
                 name: name,
@@ -27,7 +25,7 @@ export const bloggersRepository = {
             bloggers.push(newBlogger)
             return newBlogger
     },
-    async updateBlogger(bloggerId: number, name: string, youtubeUrl: string): Promise<boolean> {
+    updateBlogger(bloggerId: number, name: string, youtubeUrl: string) {
         let blogger = bloggers.find(p => p.id === bloggerId)
         if (blogger) {
                 blogger.name = name
@@ -37,7 +35,7 @@ export const bloggersRepository = {
             return false
         }
     },
-    async deleteBlogger(bloggerId: number): Promise<boolean> {
+    deleteBlogger(bloggerId: number) {
         let blogger = bloggers.find(p => p.id === bloggerId)
         if (blogger) {
             bloggers = bloggers.filter((v) => v.id !== bloggerId)
