@@ -1,3 +1,5 @@
+//doesn't really need to be async
+
 import {bloggerDBType} from "./types";
 
 export let bloggers = [
@@ -9,14 +11,14 @@ export let bloggers = [
 ]
 
 export const bloggersRepository = {
-    async getBloggers(): Promise<bloggerDBType[]> {
+    async getBloggers() {
         return bloggers
     },
-    async getBloggerById(bloggerId: number): Promise<bloggerDBType | undefined> {
-        let blogger: bloggerDBType | undefined= bloggers.find(p => p.id === bloggerId)
+    async getBloggerById(bloggerId: number) {
+        let blogger = bloggers.find(p => p.id === bloggerId)
         return blogger
     },
-    async createBlogger(name: string, youtubeUrl: string): Promise<bloggerDBType> {
+    async createBlogger(name: string, youtubeUrl: string) {
             const newBlogger = {
                 id: +(new Date()),
                 name: name,

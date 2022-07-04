@@ -3,10 +3,10 @@ import {bloggersCollection} from "./db";
 
 export const bloggersRepository = {
     async getBloggers(): Promise<bloggerDBType[]> {
-        return bloggersCollection.find({})
+        return bloggersCollection.find({}).toArray()
     },
-    async getBloggerById(bloggerId: number): Promise<bloggersType> {
-        let blogger: bloggersType = bloggers.find(p => p.id === bloggerId)
+    async getBloggerById(bloggerId: number): Promise<bloggerDBType | null> {
+        let blogger = bloggersCollection.findOne({id: bloggerId})
         return blogger
     },
     async createBlogger(name: string, youtubeUrl: string): Promise<bloggersType> {
