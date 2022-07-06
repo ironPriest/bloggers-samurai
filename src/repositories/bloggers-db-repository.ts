@@ -9,9 +9,8 @@ export const bloggersRepository = {
     async getBloggerById(bloggerId: number): Promise<bloggerDBType | null> {
         return bloggersCollection.findOne({id: bloggerId})
     },
-    async createBlogger(name: string, youtubeUrl: string): Promise<bloggerDBType> {
-            let newBlogger: bloggerDBType
-            await bloggersCollection.insertOne(newBlogger = {_id: new ObjectId(), id: +(new Date()), name: name, youtubeUrl: youtubeUrl})
+    async createBlogger(newBlogger: bloggerDBType): Promise<bloggerDBType> {
+            await bloggersCollection.insertOne(newBlogger)
             return newBlogger
     },
     async updateBlogger(bloggerId: number, name: string, youtubeUrl: string): Promise<boolean> {
