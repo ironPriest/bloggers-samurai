@@ -1,9 +1,9 @@
 import {Request, Response, Router} from "express";
-import {postsRepository, postType} from "../repositories/posts-db-repository";
-import {bloggersRepository} from "../repositories/bloggers-db-repository";
+import {postsRepository} from "../repositories/posts-db-repository";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {body} from "express-validator";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
+import {postDBType} from "../repositories/types";
 
 export const postsRouter = Router({})
 
@@ -27,11 +27,11 @@ const bloggerIdValidation = body('bloggerId')
     .exists({checkFalsy: true})
 
 postsRouter.get('/', async(req: Request, res: Response ) => {
-    const posts: postType[] = await postsRepository.getPosts()
+    const posts: postDBType[] = await postsRepository.getPosts()
     res.send(posts)
 })
 postsRouter.get('/:postId', async(req: Request, res: Response ) => {
-    const post: postType = await postsRepository.getPostById(+req.params.postId)
+    const post: postDBType | null = await postsRepository.getPostById(+req.params.postId)
     if (post) {
         res.send(post)
     } else {
@@ -46,7 +46,7 @@ postsRouter.post('/',
     bloggerIdValidation,
     inputValidationMiddleware,
     async(req: Request, res: Response) => {
-    const newPost: postType = await postsRepository.createPost(
+    const newPost: postDBType | undefined= await postsRepository.createPost(
         req.body.title,
         req.body.shortDescription,
         req.body.content,
@@ -78,7 +78,7 @@ postsRouter.put('/:postId',
         req.body.content,
         req.body.bloggerId)
     if (isUpdated === 2) {
-        const post: postType = await postsRepository.getPostById(+req.params.postId)
+        const post: postDBType | null = await postsRepository.getPostById(+req.params.postId)
         res.status(204).send(post)
     } else  if (isUpdated === 1) {
         res.status(400).json({

@@ -13,8 +13,7 @@ export const bloggersRepository = {
         return bloggers
     },
     getBloggerById(bloggerId: number) {
-        let blogger = bloggers.find(p => p.id === bloggerId)
-        return blogger
+        return bloggers.find(p => p.id === bloggerId)
     },
     createBlogger(name: string, youtubeUrl: string) {
             const newBlogger = {

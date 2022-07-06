@@ -1,12 +1,12 @@
-import {NextFunction, Request, Response, Router} from "express";
-import {bloggersRepository, bloggersType} from "../repositories/bloggers-db-repository";
-import {body, validationResult} from "express-validator";
+import {Request, Response, Router} from "express";
+import {bloggersRepository} from "../repositories/bloggers-db-repository";
+import {body} from "express-validator";
 import {
-    contentChecker,
     inputValidationMiddleware,
     requestsCounterMiddleware
 } from "../middlewares/input-validation-middleware";
 import {authMiddleware} from "../middlewares/auth-middleware";
+import {bloggerDBType} from "../repositories/types";
 //import {ipCheckMiddleware} from "../middlewares/ip-check-middleware";
 
 export const bloggersRouter = Router({})
@@ -27,11 +27,11 @@ const youtubeUrlValidation = body('youtubeUrl')
     .matches('^https://([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$')
 
 bloggersRouter.get('/', async(req: Request, res: Response) => {
-    const bloggers: bloggersType[] = await bloggersRepository.getBloggers()
+    const bloggers: bloggerDBType[] = await bloggersRepository.getBloggers()
     res.send(bloggers)
 })
 bloggersRouter.get('/:bloggerId', async(req: Request, res: Response) => {
-    let blogger: bloggersType = await bloggersRepository.getBloggerById(+req.params.bloggerId)
+    let blogger: bloggerDBType | null = await bloggersRepository.getBloggerById(+req.params.bloggerId)
     if (blogger) {
         res.send(blogger)
     } else {
@@ -44,7 +44,7 @@ bloggersRouter.post('/',
     youtubeUrlValidation,
     inputValidationMiddleware,
     async(req: Request, res: Response) => {
-    const newBlogger: bloggersType = await bloggersRepository.createBlogger(req.body.name, req.body.youtubeUrl)
+    const newBlogger: bloggerDBType = await bloggersRepository.createBlogger(req.body.name, req.body.youtubeUrl)
     res.status(201).send(newBlogger)
 })
 bloggersRouter.put('/:bloggerId',
@@ -58,7 +58,7 @@ bloggersRouter.put('/:bloggerId',
         req.body.name,
         req.body.youtubeUrl)
     if (isUpdated) {
-        const blogger: bloggersType = await bloggersRepository.getBloggerById(+req.params.bloggerId)
+        const blogger: bloggerDBType | null = await bloggersRepository.getBloggerById(+req.params.bloggerId)
         res.status(204).send(blogger)
     } else {
         res.send(404)
