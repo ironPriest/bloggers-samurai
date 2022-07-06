@@ -1,5 +1,5 @@
 import {bloggerDBType} from "./types";
-import {bloggersCollection, usersCollection} from "./db";
+import {bloggersCollection} from "./db";
 import {ObjectId} from "mongodb";
 
 export const bloggersRepository = {
@@ -15,7 +15,7 @@ export const bloggersRepository = {
             return newBlogger
     },
     async updateBlogger(bloggerId: number, name: string, youtubeUrl: string): Promise<boolean> {
-        let result = await usersCollection.updateOne({id: bloggerId}, {$set: {name: name, youtubeUrl: youtubeUrl}})
+        let result = await bloggersCollection.updateOne({id: bloggerId}, {$set: {name: name, youtubeUrl: youtubeUrl}})
         return result.matchedCount === 1
     },
     async deleteBlogger(bloggerId: number): Promise<boolean> {

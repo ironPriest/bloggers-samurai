@@ -1,4 +1,4 @@
-import {ObjectId, WithId} from 'mongodb'
+import {WithId} from 'mongodb'
 
 export type bloggerDBType = WithId<{
     id: number
@@ -11,5 +11,5 @@ export type postDBType = WithId<{
     shortDescription: string
     content: string
     bloggerId: number
-    bloggerName: string
+    bloggerName: string | undefined
 }>

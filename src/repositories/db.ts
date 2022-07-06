@@ -8,7 +8,7 @@ export const client = new MongoClient(mongoUri);
 let db = client.db("testDB")
 
 export const bloggersCollection = db.collection<bloggerDBType>('bloggers')
-export const usersCollection = db.collection<postDBType>('posts')
+export const postsCollection = db.collection<postDBType>('posts')
 
 export async function runDb() {
     try {
