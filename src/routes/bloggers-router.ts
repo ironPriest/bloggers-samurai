@@ -43,7 +43,7 @@ bloggersRouter.post('/',
     nameValidation,
     youtubeUrlValidation,
     inputValidationMiddleware,
-    async(req: Request, res: Response) => {
+    async(req: Request, res: Response <Omit<bloggerDBType, '_id'>>) => {
     const newBlogger: bloggerDBType = await bloggersService.createBlogger(req.body.name, req.body.youtubeUrl)
     res.status(201).send(newBlogger)
 })
