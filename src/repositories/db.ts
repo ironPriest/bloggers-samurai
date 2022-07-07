@@ -1,9 +1,9 @@
 import {MongoClient} from 'mongodb'
 import {bloggerDBType, postDBType} from './types'
 
-//const mongoUri = process.env.mongoURI || "mongodb+srv://andrei_shylovich:tDEU6uF8SedAaKvy@cluster0.huoctrk.mongodb.net/?retryWrites=true&w=majority"
+const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017"
 
-export const client = new MongoClient("mongodb+srv://andrei_shylovich:tDEU6uF8SedAaKvy@cluster0.huoctrk.mongodb.net/?retryWrites=true&w=majority");
+export const client = new MongoClient(mongoUri);
 
 let db = client.db("testDB")
 
