@@ -1,6 +1,5 @@
 import {bloggerDBType} from "./types";
 import {bloggersCollection} from "./db";
-import {ObjectId} from "mongodb";
 
 export const bloggersRepository = {
     async getBloggers(): Promise<bloggerDBType[]> {
