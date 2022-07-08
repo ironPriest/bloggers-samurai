@@ -9,7 +9,7 @@ export const bloggersRepository = {
         return bloggersCollection.findOne({id: bloggerId})
     },
     async createBlogger(newBlogger: bloggerDBType): Promise<bloggerDBType> {
-            await bloggersCollection.insertOne(newBlogger)
+            await bloggersCollection.insertOne(newBlogger, {forceServerObjectId: true})
             return newBlogger
     },
     async updateBlogger(bloggerId: number, name: string, youtubeUrl: string): Promise<boolean> {
