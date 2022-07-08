@@ -6,8 +6,18 @@ export const bloggersService = {
     async getBloggers(): Promise<bloggerDBType[]> {
         return bloggersRepository.getBloggers()
     },
-    async getBloggerById(bloggerId: number): Promise<bloggerDBType | null> {
-        return bloggersRepository.getBloggerById(bloggerId)
+    async getBloggerById(bloggerId: number): Promise<Omit<bloggerDBType, '_id'> | null> {
+        let blogger: bloggerDBType | null = await bloggersRepository.getBloggerById(bloggerId)
+        if (blogger) {
+            return {
+                id: blogger.id,
+                name: blogger.name,
+                youtubeUrl: blogger.youtubeUrl
+            }
+        } else {
+            return null
+        }
+
     },
     async createBlogger(name: string, youtubeUrl: string): Promise<Omit<bloggerDBType, "_id">> {
         let newBlogger: bloggerDBType = {

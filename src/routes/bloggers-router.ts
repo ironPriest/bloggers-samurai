@@ -31,7 +31,7 @@ bloggersRouter.get('/', async(req: Request, res: Response) => {
     res.send(bloggers)
 })
 bloggersRouter.get('/:bloggerId', async(req: Request, res: Response) => {
-    let blogger: bloggerDBType | null = await bloggersService.getBloggerById(+req.params.bloggerId)
+    let blogger = await bloggersService.getBloggerById(+req.params.bloggerId)
     if (blogger) {
         res.send(blogger)
     } else {
@@ -58,7 +58,7 @@ bloggersRouter.put('/:bloggerId',
         req.body.name,
         req.body.youtubeUrl)
     if (isUpdated) {
-        const blogger: bloggerDBType | null = await bloggersService.getBloggerById(+req.params.bloggerId)
+        const blogger = await bloggersService.getBloggerById(+req.params.bloggerId)
         res.status(204).send(blogger)
     } else {
         res.send(404)
