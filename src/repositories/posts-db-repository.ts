@@ -4,7 +4,7 @@ import {ObjectId} from "mongodb";
 
 export const postsRepository = {
     async getPosts(): Promise<postDBType[]> {
-        return postsCollection.find({}).toArray()
+        return postsCollection.find({}, {projection:{_id: 0}}).toArray()
     },
     async getPostById(postId: number): Promise<postDBType | null> {
         return postsCollection.findOne({id: postId})
