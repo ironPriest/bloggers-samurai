@@ -12,8 +12,21 @@ export const postsService = {
         title: string,
         shortDescription: string,
         content: string,
-        bloggerId: number): Promise<postDBType | undefined> {
-        return postsRepository.createPost(title, shortDescription, content, bloggerId)
+        bloggerId: number): Promise<Omit<postDBType, "_id"> | undefined> {
+        const createdPost = await postsRepository.createPost(title, shortDescription, content, bloggerId)
+        if (createdPost) {
+            return {
+                id: createdPost.id,
+                title: createdPost.title,
+                shortDescription: createdPost.shortDescription,
+                content: createdPost.content,
+                bloggerId: createdPost.bloggerId,
+                bloggerName: createdPost.bloggerName
+            }
+        } else {
+            return
+        }
+
     },
     async updatePost(
         postId: number,

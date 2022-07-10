@@ -46,7 +46,7 @@ postsRouter.post('/',
     bloggerIdValidation,
     inputValidationMiddleware,
     async(req: Request, res: Response) => {
-    const newPost: postDBType | undefined= await postsService.createPost(
+    const newPost = await postsService.createPost(
         req.body.title,
         req.body.shortDescription,
         req.body.content,
