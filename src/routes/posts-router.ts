@@ -31,7 +31,7 @@ postsRouter.get('/', async(req: Request, res: Response ) => {
     res.send(posts)
 })
 postsRouter.get('/:postId', async(req: Request, res: Response ) => {
-    const post: postDBType | null = await postsService.getPostById(+req.params.postId)
+    const post = await postsService.getPostById(+req.params.postId)
     if (post) {
         res.send(post)
     } else {
@@ -78,7 +78,7 @@ postsRouter.put('/:postId',
         req.body.content,
         req.body.bloggerId)
     if (isUpdated === 2) {
-        const post: postDBType | null = await postsService.getPostById(+req.params.postId)
+        const post = await postsService.getPostById(+req.params.postId)
         res.status(204).send(post)
     } else  if (isUpdated === 1) {
         res.status(400).json({

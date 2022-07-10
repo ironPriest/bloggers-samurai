@@ -5,8 +5,21 @@ export const postsService = {
     async getPosts(): Promise<postDBType[]> {
         return postsRepository.getPosts()
     },
-    async getPostById(postId: number): Promise<postDBType | null> {
-        return postsRepository.getPostById(postId)
+    async getPostById(postId: number): Promise<Omit<postDBType, '_id'> | null> {
+        let post: postDBType | null = await postsRepository.getPostById(postId)
+        if (post) {
+            return {
+                id: post.id,
+                title: post.title,
+                shortDescription: post.shortDescription,
+                content: post.content,
+                bloggerId: post.bloggerId,
+                bloggerName: post.bloggerName
+            }
+        } else {
+            return null
+        }
+
     },
     async createPost(
         title: string,
