@@ -58,7 +58,17 @@ bloggersRouter.post('/:bloggerId/posts',
         req.body.shortDescription,
         req.body.content,
         +req.params.bloggerId)
-    res.status(201).send(newPost)
+    if (newPost) {
+        res.status(201).send(newPost)
+    } else {
+        res.status(404).json({
+            errorsMessages: [{
+                "message": "no such bloggerId!!",
+                "field": "bloggerId"
+            }]
+        })
+    }
+
 })
 bloggersRouter.put('/:bloggerId',
     authMiddleware,
