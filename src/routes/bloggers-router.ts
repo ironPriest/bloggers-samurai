@@ -7,6 +7,7 @@ import {
 } from "../middlewares/input-validation-middleware";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {bloggerDBType} from "../repositories/types";
+import {postsService} from "../domain/posts-service";
 //import {ipCheckMiddleware} from "../middlewares/ip-check-middleware";
 
 export const bloggersRouter = Router({})
@@ -44,8 +45,20 @@ bloggersRouter.post('/',
     youtubeUrlValidation,
     inputValidationMiddleware,
     async(req: Request, res: Response) => {
-    const newBlogger = await bloggersService.createBlogger(req.body.name, req.body.youtubeUrl)
+    const newBlogger = await bloggersService.createBlogger(
+        req.body.name,
+        req.body.youtubeUrl)
     res.status(201).send(newBlogger)
+})
+bloggersRouter.post('/:bloggerId/posts',
+    authMiddleware,
+    async (req: Request, res: Response) => {
+    const newPost = await postsService.createPost(
+        req.body.title,
+        req.body.shortDescription,
+        req.body.content,
+        +req.params.bloggerId)
+    res.status(201).send(newPost)
 })
 bloggersRouter.put('/:bloggerId',
     authMiddleware,
