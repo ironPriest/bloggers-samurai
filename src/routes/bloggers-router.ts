@@ -28,8 +28,15 @@ const youtubeUrlValidation = body('youtubeUrl')
     .matches('^https://([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$')
 
 bloggersRouter.get('/', async(req: Request, res: Response) => {
-    const bloggers: bloggerDBType[] = await bloggersService.getBloggers()
-    res.send(bloggers)
+    if (req.query.PageNumber && req.query.PageSize) {
+        const bloggers = await bloggersService.getBloggers(
+            req.query.SearchNameTerm?.toString(),
+            +req.query.PageNumber,
+            +req.query.PageSize)
+        res.send(bloggers)
+    } else {
+        res.send(404)
+    }
 })
 bloggersRouter.get('/:bloggerId', async(req: Request, res: Response) => {
     let blogger = await bloggersService.getBloggerById(+req.params.bloggerId)

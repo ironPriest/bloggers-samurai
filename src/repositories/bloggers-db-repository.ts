@@ -2,9 +2,20 @@ import {bloggerDBType} from "./types";
 import {bloggersCollection} from "./db";
 
 export const bloggersRepository = {
-    async getBloggers(): Promise<bloggerDBType[]> {
-        //const projection = {_id: 0}
-        return bloggersCollection.find({}, {projection:{_id: 0}}).toArray()
+    async getBloggers(searchTerm: string | undefined, pageNumber: number, pageSize: number) {
+        let totalCount: Promise<number> | number = await bloggersCollection.count({})
+        let pageCount = Math.ceil( +totalCount / pageSize)
+        return {
+            "pageCount": pageCount,
+            "page": pageNumber,
+            "pageSize": pageSize,
+            "totalCount": totalCount,
+            "items": await bloggersCollection
+                .find({}, {projection:{_id: 0}})
+                .skip((pageNumber - 1) * pageSize)
+                .limit(pageSize)
+                .toArray()
+        }
     },
     async getBloggerById(bloggerId: number): Promise<bloggerDBType | null> {
         return bloggersCollection.findOne({id: bloggerId})

@@ -3,8 +3,8 @@ import {ObjectId} from "mongodb";
 import {bloggersRepository} from "../repositories/bloggers-db-repository"
 
 export const bloggersService = {
-    async getBloggers(): Promise<bloggerDBType[]> {
-        return bloggersRepository.getBloggers()
+    async getBloggers(searchTerm: string | undefined, pageNumber: number, pageSize: number) {
+        return await bloggersRepository.getBloggers(searchTerm, pageNumber, pageSize)
     },
     async getBloggerById(bloggerId: number): Promise<Omit<bloggerDBType, '_id'> | null> {
         let blogger: bloggerDBType | null = await bloggersRepository.getBloggerById(bloggerId)
