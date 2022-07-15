@@ -47,13 +47,18 @@ bloggersRouter.get('/:bloggerId', async(req: Request, res: Response) => {
     }
 })
 bloggersRouter.get('/:bloggerId/posts', async(req: Request, res: Response) => {
-    if (req.query.PageNumber && req.query.PageSize) {
-        const posts = await postsService.getPosts(
-            +req.query.PageNumber,
-            +req.query.PageSize)
-        res.send(posts)
+    let blogger = await bloggersService.getBloggerById(+req.params.bloggerId)
+    if (blogger) {
+        if (req.query.PageNumber && req.query.PageSize) {
+            const posts = await postsService.getPosts(
+                +req.query.PageNumber,
+                +req.query.PageSize)
+            res.send(posts)
+        } else {
+            res.send(400)
+        }
     } else {
-        res.send(400)
+        res.send(404)
     }
 })
 bloggersRouter.post('/',
