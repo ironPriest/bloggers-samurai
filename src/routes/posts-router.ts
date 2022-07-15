@@ -27,8 +27,14 @@ const bloggerIdValidation = body('bloggerId')
     .exists({checkFalsy: true})
 
 postsRouter.get('/', async(req: Request, res: Response ) => {
-    const posts: postDBType[] = await postsService.getPosts()
-    res.send(posts)
+    if (req.query.PageNumber && req.query.PageSize) {
+        const posts = await postsService.getPosts(
+            +req.query.PageNumber,
+            +req.query.PageSize)
+        res.send(posts)
+    } else {
+        res.send(400)
+    }
 })
 postsRouter.get('/:postId', async(req: Request, res: Response ) => {
     const post = await postsService.getPostById(+req.params.postId)

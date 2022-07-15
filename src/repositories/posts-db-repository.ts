@@ -3,8 +3,20 @@ import {bloggersCollection, postsCollection} from "./db";
 import {ObjectId} from "mongodb";
 
 export const postsRepository = {
-    async getPosts(): Promise<postDBType[]> {
-        return postsCollection.find({}, {projection:{_id: 0}}).toArray()
+    async getPosts(pageNumber: number, pageSize: number) {
+        let totalCount = await postsCollection.count({})
+        let pageCount = Math.ceil(totalCount / pageSize)
+        return {
+            "pageCount": pageCount,
+            "page": pageNumber,
+            "pageSize": pageSize,
+            "totalCount": totalCount,
+            "items": await postsCollection
+                .find({}, {projection:{_id: 0}})
+                .skip((pageNumber - 1) * pageSize)
+                .limit(pageSize)
+                .toArray()
+        }
     },
     async getPostById(postId: number): Promise<postDBType | null> {
         return postsCollection.findOne({id: postId})
