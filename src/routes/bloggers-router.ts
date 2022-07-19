@@ -78,7 +78,6 @@ bloggersRouter.post('/:bloggerId/posts',
     descValidation,
     titleValidation,
     contentValidation,
-    bloggerIdValidation,
     inputValidationMiddleware,
     async (req: Request, res: Response) => {
     const newPost = await postsService.createPost(
