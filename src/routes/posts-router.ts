@@ -64,8 +64,8 @@ postsRouter.post('/',
             errorsMessages: [{
                 "message": "no such bloggerId!!",
                 "field": "bloggerId"
-            }],
-            resultCode: 1 })
+            }]
+        })
     }
 
 })
@@ -91,8 +91,8 @@ postsRouter.put('/:postId',
             errorsMessages: [{
                 "message": "no such bloggerId",
                 "field": "bloggerId"
-            }],
-            resultCode: 1 })
+            }]
+        })
     } else {
         res.send(404)
     }
