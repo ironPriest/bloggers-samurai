@@ -6,7 +6,7 @@ export const bloggersRepository = {
         let totalCount: Promise<number> | number = await bloggersCollection.count({})
         let pageCount = Math.ceil( +totalCount / pageSize)
         return {
-            "pageCount": pageCount,
+            "pagesCount": pageCount,
             "page": pageNumber,
             "pageSize": pageSize,
             "totalCount": totalCount,
