@@ -7,22 +7,22 @@ import {postsService} from "../domain/posts-service";
 
 export const postsRouter = Router({})
 
-const titleValidation = body('title')
+export const titleValidation = body('title')
     .trim()
     .exists({checkFalsy: true})
     .isLength({max: 30})
 
-const descValidation = body('shortDescription')
+export const descValidation = body('shortDescription')
     .trim()
     .exists({checkFalsy: true})
     .isLength({max: 100})
 
-const contentValidation = body('content')
+export const contentValidation = body('content')
     .trim()
     .exists({checkFalsy: true})
     .isLength({max: 1000})
 
-const bloggerIdValidation = body('bloggerId')
+export const bloggerIdValidation = body('bloggerId')
     .isInt()
     .exists({checkFalsy: true})
 
@@ -46,8 +46,8 @@ postsRouter.get('/:postId', async(req: Request, res: Response ) => {
 })
 postsRouter.post('/',
     authMiddleware,
-    titleValidation,
     descValidation,
+    titleValidation,
     contentValidation,
     bloggerIdValidation,
     inputValidationMiddleware,
@@ -71,8 +71,8 @@ postsRouter.post('/',
 })
 postsRouter.put('/:postId',
     authMiddleware,
-    titleValidation,
     descValidation,
+    titleValidation,
     contentValidation,
     bloggerIdValidation,
     inputValidationMiddleware,

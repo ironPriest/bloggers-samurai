@@ -8,6 +8,7 @@ import {
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {bloggerDBType} from "../repositories/types";
 import {postsService} from "../domain/posts-service";
+import {bloggerIdValidation, contentValidation, descValidation, titleValidation} from "./posts-router";
 //import {ipCheckMiddleware} from "../middlewares/ip-check-middleware";
 
 export const bloggersRouter = Router({})
@@ -63,8 +64,8 @@ bloggersRouter.get('/:bloggerId/posts', async(req: Request, res: Response) => {
 })
 bloggersRouter.post('/',
     authMiddleware,
-    nameValidation,
     youtubeUrlValidation,
+    nameValidation,
     inputValidationMiddleware,
     async(req: Request, res: Response) => {
     const newBlogger = await bloggersService.createBlogger(
@@ -74,6 +75,11 @@ bloggersRouter.post('/',
 })
 bloggersRouter.post('/:bloggerId/posts',
     authMiddleware,
+    descValidation,
+    titleValidation,
+    contentValidation,
+    bloggerIdValidation,
+    inputValidationMiddleware,
     async (req: Request, res: Response) => {
     const newPost = await postsService.createPost(
         req.body.title,
@@ -94,8 +100,8 @@ bloggersRouter.post('/:bloggerId/posts',
 })
 bloggersRouter.put('/:bloggerId',
     authMiddleware,
-    nameValidation,
     youtubeUrlValidation,
+    nameValidation,
     inputValidationMiddleware,
     async(req: Request, res: Response) => {
     const isUpdated: boolean = await bloggersService.updateBlogger(
