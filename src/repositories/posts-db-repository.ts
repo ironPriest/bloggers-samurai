@@ -8,8 +8,8 @@ export const postsRepository = {
         if (bloggerId) {
             filter.bloggerId = bloggerId
         }
-        let totalCount = await postsCollection.count({})
-        let pageCount = Math.ceil(totalCount / pageSize)
+        let totalCount = await postsCollection.count(filter)
+        let pageCount = Math.ceil(+totalCount / pageSize)
         return {
             "pagesCount": pageCount,
             "page": pageNumber,
