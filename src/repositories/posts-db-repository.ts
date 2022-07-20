@@ -7,7 +7,7 @@ export const postsRepository = {
         let totalCount = await postsCollection.count({})
         let pageCount = Math.ceil(totalCount / pageSize)
         return {
-            "pageCount": pageCount,
+            "pagesCount": pageCount,
             "page": pageNumber,
             "pageSize": pageSize,
             "totalCount": totalCount,
