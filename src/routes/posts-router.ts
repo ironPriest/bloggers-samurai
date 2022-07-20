@@ -27,14 +27,12 @@ export const bloggerIdValidation = body('bloggerId')
     .exists({checkFalsy: true})
 
 postsRouter.get('/', async(req: Request, res: Response ) => {
-    if (req.query.PageNumber && req.query.PageSize) {
-        const posts = await postsService.getPosts(
-            +req.query.PageNumber,
-            +req.query.PageSize)
-        res.send(posts)
-    } else {
-        res.send(400)
-    }
+    const PageNumber = req.query.PageNumber? +req.query.PageNumber: 1
+    const PageSize = req.query.PageSize? +req.query.PageSize: 10
+    const posts = await postsService.getPosts(
+        PageNumber,
+        PageSize)
+    res.send(posts)
 })
 postsRouter.get('/:postId', async(req: Request, res: Response ) => {
     const post = await postsService.getPostById(+req.params.postId)
