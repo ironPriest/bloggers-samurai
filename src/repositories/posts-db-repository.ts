@@ -3,7 +3,11 @@ import {bloggersCollection, postsCollection} from "./db";
 import {ObjectId} from "mongodb";
 
 export const postsRepository = {
-    async getPosts(pageNumber: number, pageSize: number) {
+    async getPosts(pageNumber: number, pageSize: number, bloggerId: number | null | undefined) {
+        const filter: any = {}
+        if (bloggerId) {
+            filter.bloggerId = bloggerId
+        }
         let totalCount = await postsCollection.count({})
         let pageCount = Math.ceil(totalCount / pageSize)
         return {
@@ -12,7 +16,7 @@ export const postsRepository = {
             "pageSize": pageSize,
             "totalCount": totalCount,
             "items": await postsCollection
-                .find({}, {projection:{_id: 0}})
+                .find(filter, {projection:{_id: 0}})
                 .skip((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray()

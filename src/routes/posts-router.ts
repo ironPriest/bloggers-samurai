@@ -31,7 +31,8 @@ postsRouter.get('/', async(req: Request, res: Response ) => {
     const PageSize = req.query.PageSize? +req.query.PageSize: 10
     const posts = await postsService.getPosts(
         PageNumber,
-        PageSize)
+        PageSize,
+        null)
     res.send(posts)
 })
 postsRouter.get('/:postId', async(req: Request, res: Response ) => {
