@@ -3,6 +3,10 @@ import {bloggersCollection} from "./db";
 
 export const bloggersRepository = {
     async getBloggers(searchTerm: string | undefined, pageNumber: number, pageSize: number) {
+        const filter: any = {}
+        if (searchTerm) {
+            filter.name = {$regex: searchTerm}
+        }
         let totalCount: Promise<number> | number = await bloggersCollection.count({})
         let pageCount = Math.ceil( +totalCount / pageSize)
         return {
@@ -11,7 +15,7 @@ export const bloggersRepository = {
             "pageSize": pageSize,
             "totalCount": totalCount,
             "items": await bloggersCollection
-                .find({name: searchTerm}, {projection:{_id: 0}})
+                .find(filter, {projection:{_id: 0}})
                 .skip((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray()
