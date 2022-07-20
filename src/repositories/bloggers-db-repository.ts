@@ -7,7 +7,7 @@ export const bloggersRepository = {
         if (searchTerm) {
             filter.name = {$regex: searchTerm}
         }
-        let totalCount: Promise<number> | number = await bloggersCollection.count({})
+        let totalCount/*: Promise<number> | number*/ = await bloggersCollection.count(filter)
         let pageCount = Math.ceil( +totalCount / pageSize)
         return {
             "pagesCount": pageCount,
