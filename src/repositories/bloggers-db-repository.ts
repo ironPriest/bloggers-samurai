@@ -11,7 +11,7 @@ export const bloggersRepository = {
             "pageSize": pageSize,
             "totalCount": totalCount,
             "items": await bloggersCollection
-                .find({$regex: searchTerm}, {projection:{_id: 0}})
+                .find({}, {projection:{_id: 0}})
                 .skip((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray()
