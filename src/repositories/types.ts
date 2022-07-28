@@ -1,12 +1,12 @@
 import {WithId} from 'mongodb'
 
 export type bloggerDBType = WithId<{
-    id: number
+    id: string
     name: string
     youtubeUrl: string
 }>
 export type postDBType = WithId<{
-    id: number
+    id: string
     title: string
     shortDescription: string
     content: string
