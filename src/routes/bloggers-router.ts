@@ -38,7 +38,7 @@ bloggersRouter.get('/', async(req: Request, res: Response) => {
     res.send(bloggers)
 })
 bloggersRouter.get('/:bloggerId', async(req: Request, res: Response) => {
-    let blogger = await bloggersService.getBloggerById(+req.params.bloggerId)
+    let blogger = await bloggersService.getBloggerById(req.params.bloggerId)
     if (blogger) {
         res.send(blogger)
     } else {
@@ -46,7 +46,7 @@ bloggersRouter.get('/:bloggerId', async(req: Request, res: Response) => {
     }
 })
 bloggersRouter.get('/:bloggerId/posts', async(req: Request, res: Response) => {
-    let blogger = await bloggersService.getBloggerById(+req.params.bloggerId)
+    let blogger = await bloggersService.getBloggerById(req.params.bloggerId)
     if (blogger) {
         const PageNumber = req.query.PageNumber? +req.query.PageNumber: 1
         const PageSize = req.query.PageSize? +req.query.PageSize: 10
@@ -81,7 +81,7 @@ bloggersRouter.post('/:bloggerId/posts',
         req.body.title,
         req.body.shortDescription,
         req.body.content,
-        +req.params.bloggerId)
+        req.params.bloggerId)
     if (newPost) {
         res.status(201).send(newPost)
     } else {
@@ -101,11 +101,11 @@ bloggersRouter.put('/:bloggerId',
     inputValidationMiddleware,
     async(req: Request, res: Response) => {
     const isUpdated: boolean = await bloggersService.updateBlogger(
-        +req.params.bloggerId,
+        req.params.bloggerId,
         req.body.name,
         req.body.youtubeUrl)
     if (isUpdated) {
-        const blogger = await bloggersService.getBloggerById(+req.params.bloggerId)
+        const blogger = await bloggersService.getBloggerById(req.params.bloggerId)
         res.status(204).send(blogger)
     } else {
         res.send(404)
@@ -114,7 +114,7 @@ bloggersRouter.put('/:bloggerId',
 bloggersRouter.delete('/:bloggerId',
     authMiddleware,
     async(req: Request, res: Response)=>{
-    const isDeleted: boolean = await bloggersService.deleteBlogger(+req.params.bloggerId)
+    const isDeleted: boolean = await bloggersService.deleteBlogger(req.params.bloggerId)
     if (isDeleted) {
         res.send(204)
     } else {

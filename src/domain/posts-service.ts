@@ -5,8 +5,8 @@ export const postsService = {
     async getPosts(pageNumber: number, pageSize: number, bloggerId: number | null | undefined) {
         return await postsRepository.getPosts(pageNumber, pageSize, bloggerId)
     },
-    async getPostById(postId: number): Promise<Omit<postDBType, '_id'> | null> {
-        let post: postDBType | null = await postsRepository.getPostById(postId)
+    async getPostById(postId: string): Promise<Omit<postDBType, '_id'> | null> {
+        let post: postDBType | null | void = await postsRepository.getPostById(postId)
         if (post) {
             return {
                 id: post.id,
@@ -25,7 +25,7 @@ export const postsService = {
         title: string,
         shortDescription: string,
         content: string,
-        bloggerId: number): Promise<Omit<postDBType, "_id"> | undefined> {
+        bloggerId: string): Promise<Omit<postDBType, "_id"> | undefined> {
         const createdPost = await postsRepository.createPost(title, shortDescription, content, bloggerId)
         if (createdPost) {
             return {
@@ -42,14 +42,14 @@ export const postsService = {
 
     },
     async updatePost(
-        postId: number,
+        postId: string,
         title: string,
         shortDescription: string,
         content: string,
-        bloggerId: number): Promise<number> {
+        bloggerId: string): Promise<number> {
         return postsRepository.updatePost(postId, title, shortDescription, content, bloggerId)
     },
-    async deletePost(postId: number): Promise<boolean> {
+    async deletePost(postId: string): Promise<boolean> {
         return  postsRepository.deletePost(postId)
     }
 }

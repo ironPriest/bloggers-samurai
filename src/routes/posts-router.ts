@@ -36,7 +36,7 @@ postsRouter.get('/', async(req: Request, res: Response ) => {
     res.send(posts)
 })
 postsRouter.get('/:postId', async(req: Request, res: Response ) => {
-    const post = await postsService.getPostById(+req.params.postId)
+    const post = await postsService.getPostById(req.params.postId)
     if (post) {
         res.send(post)
     } else {
@@ -77,13 +77,13 @@ postsRouter.put('/:postId',
     inputValidationMiddleware,
     async(req: Request, res: Response) => {
     const isUpdated: number = await postsService.updatePost(
-        +req.params.postId,
+        req.params.postId,
         req.body.title,
         req.body.shortDescription,
         req.body.content,
         req.body.bloggerId)
     if (isUpdated === 2) {
-        const post = await postsService.getPostById(+req.params.postId)
+        const post = await postsService.getPostById(req.params.postId)
         res.status(204).send(post)
     } else  if (isUpdated === 1) {
         res.status(400).json({
@@ -99,7 +99,7 @@ postsRouter.put('/:postId',
 postsRouter.delete('/:postId',
     authMiddleware,
     async(req: Request, res: Response)=>{
-    const isDeleted: boolean = await postsService.deletePost(+req.params.postId)
+    const isDeleted: boolean = await postsService.deletePost(req.params.postId)
     if (isDeleted) {
         res.send(204)
     } else {

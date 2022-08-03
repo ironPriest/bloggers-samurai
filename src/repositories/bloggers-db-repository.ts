@@ -7,7 +7,7 @@ export const bloggersRepository = {
         if (searchTerm) {
             filter.name = {$regex: searchTerm}
         }
-        let totalCount/*: Promise<number> | number*/ = await bloggersCollection.count(filter)
+        let totalCount = await bloggersCollection.count(filter)
         let pageCount = Math.ceil( +totalCount / pageSize)
         return {
             "pagesCount": pageCount,
@@ -21,18 +21,18 @@ export const bloggersRepository = {
                 .toArray()
         }
     },
-    async getBloggerById(bloggerId: number): Promise<bloggerDBType | null> {
+    async getBloggerById(bloggerId: string): Promise<bloggerDBType | null | void> {
         return bloggersCollection.findOne({id: bloggerId})
     },
     async createBlogger(newBlogger: bloggerDBType): Promise<bloggerDBType> {
             await bloggersCollection.insertOne(newBlogger)
             return newBlogger
     },
-    async updateBlogger(bloggerId: number, name: string, youtubeUrl: string): Promise<boolean> {
+    async updateBlogger(bloggerId: string, name: string, youtubeUrl: string): Promise<boolean> {
         let result = await bloggersCollection.updateOne({id: bloggerId}, {$set: {name: name, youtubeUrl: youtubeUrl}})
         return result.matchedCount === 1
     },
-    async deleteBlogger(bloggerId: number): Promise<boolean> {
+    async deleteBlogger(bloggerId: string): Promise<boolean> {
         let result = await bloggersCollection.deleteOne({id: bloggerId})
         return result.deletedCount === 1
     }

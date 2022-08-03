@@ -22,21 +22,21 @@ export const postsRepository = {
                 .toArray()
         }
     },
-    async getPostById(postId: number): Promise<postDBType | null> {
+    async getPostById(postId: string): Promise<postDBType | null | void> {
         return postsCollection.findOne({id: postId})
     },
     async createPost(
         title: string,
         shortDescription: string,
         content: string,
-        bloggerId: number): Promise<postDBType | undefined> {
+        bloggerId: string): Promise<postDBType | undefined> {
             let result = await bloggersCollection.find({id: bloggerId}).count()
             if (result === 1) {
                 const blogger: bloggerDBType | null = await bloggersCollection.findOne({id: bloggerId})
                 let newPost: postDBType
                 await postsCollection.insertOne( newPost = {
                     _id: new ObjectId(),
-                    id: +(new Date()),
+                    id: (new Date()).toString(),
                     title: title,
                     shortDescription: shortDescription,
                     content: content,
@@ -49,11 +49,11 @@ export const postsRepository = {
             }
         },
     async updatePost(
-        postId: number,
+        postId: string,
         title: string,
         shortDescription: string,
         content: string,
-        bloggerId: number): Promise<number> {
+        bloggerId: string): Promise<number> {
         let result = await postsCollection.find({id: postId}).count()
         if (result === 1) {
             let result = await bloggersCollection.find({id: bloggerId}).count()
@@ -72,7 +72,7 @@ export const postsRepository = {
             return 0
         }
     },
-    async deletePost(postId: number): Promise<boolean> {
+    async deletePost(postId: string): Promise<boolean> {
         let result = await postsCollection.deleteOne({id: postId})
         return result.deletedCount === 1
     }

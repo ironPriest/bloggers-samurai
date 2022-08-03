@@ -10,6 +10,6 @@ export type postDBType = WithId<{
     title: string
     shortDescription: string
     content: string
-    bloggerId: number
+    bloggerId: string
     bloggerName: string | undefined
 }>

@@ -6,8 +6,8 @@ export const bloggersService = {
     async getBloggers(searchTerm: string | undefined, pageNumber: number, pageSize: number) {
         return await bloggersRepository.getBloggers(searchTerm, pageNumber, pageSize)
     },
-    async getBloggerById(bloggerId: number): Promise<Omit<bloggerDBType, '_id'> | null> {
-        let blogger: bloggerDBType | null = await bloggersRepository.getBloggerById(bloggerId)
+    async getBloggerById(bloggerId: string): Promise<Omit<bloggerDBType, '_id'> | null> {
+        let blogger: bloggerDBType | null | void = await bloggersRepository.getBloggerById(bloggerId)
         if (blogger) {
             return {
                 id: blogger.id,
@@ -22,7 +22,7 @@ export const bloggersService = {
     async createBlogger(name: string, youtubeUrl: string): Promise<Omit<bloggerDBType, "_id">> {
         let newBlogger: bloggerDBType = {
             _id: new ObjectId(),
-            id: +(new Date()),
+            id: (new Date()).toString(),
             name: name,
             youtubeUrl: youtubeUrl
         }
@@ -33,10 +33,10 @@ export const bloggersService = {
             youtubeUrl: createdBlogger.youtubeUrl
         }
     },
-    async updateBlogger(bloggerId: number, name: string, youtubeUrl: string): Promise<boolean> {
+    async updateBlogger(bloggerId: string, name: string, youtubeUrl: string): Promise<boolean> {
         return bloggersRepository.updateBlogger(bloggerId, name, youtubeUrl)
     },
-    async deleteBlogger(bloggerId: number): Promise<boolean> {
+    async deleteBlogger(bloggerId: string): Promise<boolean> {
         return bloggersRepository.deleteBlogger(bloggerId)
     }
 }
