@@ -6,7 +6,7 @@ import {
     requestsCounterMiddleware
 } from "../middlewares/input-validation-middleware";
 import {authMiddleware} from "../middlewares/auth-middleware";
-import {bloggerDBType} from "../repositories/types";
+import {bloggerDBType} from "../types/types";
 import {postsService} from "../domain/posts-service";
 import {bloggerIdValidation, contentValidation, descValidation, titleValidation} from "./posts-router";
 //import {ipCheckMiddleware} from "../middlewares/ip-check-middleware";

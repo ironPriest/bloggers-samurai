@@ -1,4 +1,4 @@
-import {postDBType, bloggerDBType} from "./types";
+import {postDBType, bloggerDBType} from "../types/types";
 import {bloggersCollection, postsCollection} from "./db";
 import {ObjectId} from "mongodb";
 

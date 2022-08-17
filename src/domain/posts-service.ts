@@ -1,4 +1,4 @@
-import {postDBType} from "../repositories/types";
+import {postDBType} from "../types/types";
 import {postsRepository} from "../repositories/posts-db-repository";
 
 export const postsService = {

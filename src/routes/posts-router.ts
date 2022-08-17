@@ -2,8 +2,10 @@ import {Request, Response, Router} from "express";
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {body} from "express-validator";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
-import {postDBType} from "../repositories/types";
+import {postDBType} from "../types/types";
 import {postsService} from "../domain/posts-service";
+import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
+import {commentsService} from "../domain/comments-service";
 
 export const postsRouter = Router({})
 
@@ -98,11 +100,21 @@ postsRouter.put('/:postId',
 })
 postsRouter.delete('/:postId',
     authMiddleware,
-    async(req: Request, res: Response)=>{
+    async(req: Request, res: Response) => {
     const isDeleted: boolean = await postsService.deletePost(req.params.postId)
     if (isDeleted) {
         res.send(204)
     } else {
         res.send(404)
     }
+})
+postsRouter.post('/:postId/comments', bearerAuthMiddleware,
+    async(req, res) => {
+    const newComment = await commentsService.create(req.body.content, req.user!._id)
+    res.status(201).send(newComment)
+})
+postsRouter.get('/:postId/comments',
+    async (req, res) => {
+    const comments = commentsService.getPostComments(req.params.postId)
+    res.status(201).send(comments)
 })

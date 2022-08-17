@@ -1,5 +1,5 @@
 import {MongoClient} from 'mongodb'
-import {bloggerDBType, postDBType} from './types'
+import {bloggerDBType, postDBType, UserDBType, CommentDBType} from '../types/types'
 
 const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017"
 
@@ -9,6 +9,8 @@ let db = client.db("testDB")
 
 export const bloggersCollection = db.collection<bloggerDBType>('bloggers')
 export const postsCollection = db.collection<postDBType>('posts')
+export const usersCollection = db.collection<UserDBType>('users')
+export const commentsCollection = db.collection<CommentDBType>('comments')
 
 export async function runDb() {
     try {
