@@ -22,7 +22,7 @@ export const usersRepository = {
             "pageSize": pageSize,
             "totalCount": totalCount,
             "items": await usersCollection
-                .find({}, {projection: {_id: 0}})
+                .find({}, {projection: {_id: 0, passwordHash: 0}})
                 .skip((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray()
