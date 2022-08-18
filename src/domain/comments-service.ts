@@ -8,7 +8,7 @@ export const commentsService = {
         const user: UserDBType | void | null = await usersRepository.findById(userId)
         let comment = {
             _id: new ObjectId(),
-            id: (new Date()).toString(),
+            id: (new Date()).toString().replace(/\s/g, ''),
             content: content,
             userId: userId,
             userLogin: user!.login,

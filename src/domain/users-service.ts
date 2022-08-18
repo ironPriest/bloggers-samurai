@@ -7,7 +7,7 @@ export const usersService = {
         const passwordHash = await authService.generateHash(password)
         const user = {
             _id: new ObjectId(),
-            id: (new Date()).toString(),
+            id: (new Date()).toString().replace(/\s/g, ''),
             login,
             passwordHash
         }
