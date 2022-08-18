@@ -53,7 +53,7 @@ bloggersRouter.get('/:bloggerId/posts', async(req: Request, res: Response) => {
         const posts = await postsService.getPosts(
             PageNumber,
             PageSize,
-            +req.params.bloggerId)
+            req.params.bloggerId)
         res.send(posts)
     } else {
         res.send(404)

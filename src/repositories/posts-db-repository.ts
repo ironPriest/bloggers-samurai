@@ -3,7 +3,7 @@ import {bloggersCollection, postsCollection} from "./db";
 import {ObjectId} from "mongodb";
 
 export const postsRepository = {
-    async getPosts(pageNumber: number, pageSize: number, bloggerId: number | null | undefined) {
+    async getPosts(pageNumber: number, pageSize: number, bloggerId: string | null | undefined) {
         const filter: any = {}
         if (bloggerId) {
             filter.bloggerId = bloggerId

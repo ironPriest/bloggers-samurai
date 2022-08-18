@@ -2,7 +2,7 @@ import {postDBType} from "../types/types";
 import {postsRepository} from "../repositories/posts-db-repository";
 
 export const postsService = {
-    async getPosts(pageNumber: number, pageSize: number, bloggerId: number | null | undefined) {
+    async getPosts(pageNumber: number, pageSize: number, bloggerId: string | null | undefined) {
         return await postsRepository.getPosts(pageNumber, pageSize, bloggerId)
     },
     async getPostById(postId: string): Promise<Omit<postDBType, '_id'> | null> {
