@@ -36,7 +36,7 @@ export const postsRepository = {
                 let newPost: postDBType
                 await postsCollection.insertOne( newPost = {
                     _id: new ObjectId(),
-                    id: (new Date()).toString(),
+                    id: (new Date()).toString().replace(/\s/g, ''),
                     title: title,
                     shortDescription: shortDescription,
                     content: content,

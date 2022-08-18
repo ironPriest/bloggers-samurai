@@ -25,7 +25,7 @@ export const contentValidation = body('content')
     .isLength({max: 1000})
 
 export const bloggerIdValidation = body('bloggerId')
-    .isInt()
+    //.isInt()
     .exists({checkFalsy: true})
 
 postsRouter.get('/', async(req: Request, res: Response ) => {
