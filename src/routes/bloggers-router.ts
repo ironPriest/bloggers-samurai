@@ -31,7 +31,7 @@ const youtubeUrlValidation = body('youtubeUrl')
 
 const bloggerIdValidation = param('bloggerId').custom(async (bloggerId, ) => {
     const blogger = await bloggersService.getBloggerById(bloggerId)
-    console.log(blogger, 'blogger')
+    //console.log(blogger, 'blogger')
     if (!blogger) {
         throw new Error('such blogger doesnt exist')
     }
