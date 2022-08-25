@@ -10,7 +10,7 @@ export const inputValidationMiddleware = (req: Request, res: Response, next: Nex
                 field: e.param
             }
         })
-        res.status(400).json({
+        res.status(404).json({
             errorsMessages: errorsHeap});
         return
     } else {
