@@ -1,6 +1,7 @@
 import {postDBType, bloggerDBType} from "../types/types";
 import {bloggersCollection, postsCollection} from "./db";
 import {ObjectId} from "mongodb";
+import {v4} from "uuid";
 
 export const postsRepository = {
     async getPosts(pageNumber: number, pageSize: number, bloggerId: string | null | undefined) {
@@ -36,7 +37,7 @@ export const postsRepository = {
                 let newPost: postDBType
                 await postsCollection.insertOne( newPost = {
                     _id: new ObjectId(),
-                    id: (new Date()).toString().replace(/\s/g, ''),
+                    id: v4(),
                     title: title,
                     shortDescription: shortDescription,
                     content: content,
