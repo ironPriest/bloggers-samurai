@@ -10,7 +10,7 @@ export const authService = {
         if (!user) {
             return null
         }
-        const result = bcrypt.compare(password, user.passwordHash)
+        const result = await bcrypt.compare(password, user.passwordHash)
         if (!result) {
             return null
         }

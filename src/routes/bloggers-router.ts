@@ -1,6 +1,6 @@
 import {Request, Response, Router} from "express";
 import {bloggersService} from "../domain/bloggers-service";
-import {body} from "express-validator";
+import {body, param} from "express-validator";
 import {
     inputValidationMiddleware,
     requestsCounterMiddleware
@@ -8,7 +8,8 @@ import {
 import {authMiddleware} from "../middlewares/auth-middleware";
 import {bloggerDBType} from "../types/types";
 import {postsService} from "../domain/posts-service";
-import {bloggerIdValidation, contentValidation, descValidation, titleValidation} from "./posts-router";
+import {contentValidation, descValidation, titleValidation} from "./posts-router";
+import {bloggersRepository} from "../repositories/bloggers-db-repository";
 //import {ipCheckMiddleware} from "../middlewares/ip-check-middleware";
 
 export const bloggersRouter = Router({})
@@ -27,6 +28,15 @@ const youtubeUrlValidation = body('youtubeUrl')
     .exists({checkFalsy: true})
     .isLength({max: 100})
     .matches('^https://([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$')
+
+const bloggerIdValidation = param('bloggerId').custom(async (bloggerId, ) => {
+    const blogger = await bloggersService.getBloggerById(bloggerId)
+    console.log(blogger, 'blogger')
+    if (!blogger) {
+        throw new Error('such blogger doesnt exist')
+    }
+    return true
+})
 
 bloggersRouter.get('/', async(req: Request, res: Response) => {
     const PageNumber = req.query.PageNumber? +req.query.PageNumber: 1
@@ -75,6 +85,7 @@ bloggersRouter.post('/:bloggerId/posts',
     descValidation,
     titleValidation,
     contentValidation,
+    bloggerIdValidation,
     inputValidationMiddleware,
     async (req: Request, res: Response) => {
     const newPost = await postsService.createPost(
@@ -82,6 +93,7 @@ bloggersRouter.post('/:bloggerId/posts',
         req.body.shortDescription,
         req.body.content,
         req.params.bloggerId)
+        //res.status(201).send(newPost)
     if (newPost) {
         res.status(201).send(newPost)
     } else {
@@ -92,7 +104,6 @@ bloggersRouter.post('/:bloggerId/posts',
             }]
         })
     }
-
 })
 bloggersRouter.put('/:bloggerId',
     authMiddleware,

@@ -1,17 +1,23 @@
 import {ObjectId} from "mongodb";
 import {usersRepository} from "../repositories/users-repository";
 import {authService} from "./auth-service";
+import {v4} from "uuid";
 
 export const usersService = {
     async create(login: string, password: string) {
         const passwordHash = await authService.generateHash(password)
         const user = {
             _id: new ObjectId(),
-            id: (new Date()).toString().replace(/\s/g, ''),
+            id: v4(),
             login,
             passwordHash
         }
-        await usersRepository.create(user)
+        let res = await usersRepository.create(user)
+        if(!res){
+            console.log("error")
+            return
+        }
+
         return {
             id: user.id,
             login: user.login

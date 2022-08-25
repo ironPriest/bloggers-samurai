@@ -22,7 +22,7 @@ export const bloggersRepository = {
         }
     },
     async getBloggerById(bloggerId: string): Promise<bloggerDBType | null | void> {
-        return bloggersCollection.findOne({id: bloggerId})
+        return await bloggersCollection.findOne({id: bloggerId})
     },
     async createBlogger(newBlogger: bloggerDBType): Promise<bloggerDBType> {
             await bloggersCollection.insertOne(newBlogger)

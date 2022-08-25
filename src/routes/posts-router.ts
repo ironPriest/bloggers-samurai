@@ -108,7 +108,8 @@ postsRouter.delete('/:postId',
         res.send(404)
     }
 })
-postsRouter.post('/:postId/comments', bearerAuthMiddleware,
+postsRouter.post('/:postId/comments',
+    bearerAuthMiddleware,
     async(req, res) => {
     const newComment = await commentsService.create(req.body.content, req.user!._id)
     res.status(201).send(newComment)

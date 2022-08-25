@@ -1,6 +1,7 @@
 import {bloggerDBType, postDBType} from "../types/types";
 import {ObjectId} from "mongodb";
 import {bloggersRepository} from "../repositories/bloggers-db-repository"
+import {v4} from 'uuid';
 
 export const bloggersService = {
     async getBloggers(searchTerm: string | undefined, pageNumber: number, pageSize: number) {
@@ -22,7 +23,7 @@ export const bloggersService = {
     async createBlogger(name: string, youtubeUrl: string): Promise<Omit<bloggerDBType, "_id">> {
         let newBlogger: bloggerDBType = {
             _id: new ObjectId(),
-            id: (new Date()).toString().replace(/\s/g, ''),
+            id: v4(),
             name: name,
             youtubeUrl: youtubeUrl
         }

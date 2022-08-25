@@ -4,7 +4,11 @@ import {ObjectId} from "mongodb";
 
 export const usersRepository = {
     async create(user: UserDBType) {
-        await usersCollection.insertOne(user)
+        let res = await usersCollection.insertOne(user)
+        if(!res){
+            console.log('çreate user error')
+            return
+        }
         return user
     },
     async findByLogin(login: string) {
