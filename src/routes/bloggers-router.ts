@@ -55,7 +55,10 @@ bloggersRouter.get('/:bloggerId', async(req: Request, res: Response) => {
         res.send(404)
     }
 })
-bloggersRouter.get('/:bloggerId/posts', async(req: Request, res: Response) => {
+bloggersRouter.get('/:bloggerId/posts',
+    bloggerIdValidation,
+    inputValidationMiddleware,
+    async(req: Request, res: Response) => {
     let blogger = await bloggersService.getBloggerById(req.params.bloggerId)
     if (blogger) {
         const PageNumber = req.query.PageNumber? +req.query.PageNumber: 1
