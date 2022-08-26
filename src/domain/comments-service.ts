@@ -2,13 +2,14 @@ import {ObjectId} from "mongodb";
 import {commentsRepository} from "../repositories/comments-repository";
 import {usersRepository} from "../repositories/users-repository";
 import {CommentDBType, UserDBType} from "../types/types";
+import {v4} from "uuid";
 
 export const commentsService = {
     async create(content: string, userId: ObjectId | string) {
         const user: UserDBType | void | null = await usersRepository.findById(userId)
         let comment = {
             _id: new ObjectId(),
-            id: (new Date()).toString().replace(/\s/g, ''),
+            id: v4(),
             content: content,
             userId: userId,
             userLogin: user!.login,

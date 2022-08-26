@@ -15,7 +15,7 @@ export const usersRepository = {
         return await usersCollection.findOne({login: login})
     },
     async findById(id: any) {
-        return await usersCollection.findOne({id: id})
+        return await usersCollection.findOne({_id: id})
     },
     async getUsers(pageNumber: number, pageSize: number) {
         let totalCount = await usersCollection.count()
