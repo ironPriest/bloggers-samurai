@@ -5,10 +5,10 @@ import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
 export const commentsRouter = Router({})
 
 commentsRouter
-    .get('/:postId', async (req, res) => {
-        const comments = commentsService.getPostComments(req.params.postId)
-        res.status(201).send(comments)
-    })
+    // .get('/:postId', async (req, res) => {
+    //     const comments = commentsService.getPostComments(req.params.postId)
+    //     res.status(201).send(comments)
+    // })
     .put('/:id', bearerAuthMiddleware, async (req, res) =>{
         const isUpdated = await commentsService.updateComment(req.params.id, req.body.content)
         if (isUpdated) {
