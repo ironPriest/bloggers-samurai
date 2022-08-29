@@ -14,6 +14,7 @@ export const bearerAuthMiddleware = async (req: Request, res: Response, next: Ne
     if (userId) {
         req.user = await usersService.findById(userId)
         next()
+    } else {
+        res.send(401)
     }
-    res.send(401)
 }
