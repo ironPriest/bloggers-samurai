@@ -117,5 +117,5 @@ postsRouter.post('/:postId/comments',
 postsRouter.get('/:postId/comments',
     async (req, res) => {
     const comments = commentsService.getPostComments(req.params.postId)
-    res.status(201).send(comments)
+    res.status(200).send(comments)
 })
