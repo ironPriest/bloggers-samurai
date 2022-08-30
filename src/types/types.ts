@@ -23,5 +23,5 @@ export type CommentDBType = WithId<{
     content: string
     userId: string | ObjectId
     userLogin: string
-    addedAt: string
+    addedAt: Date
 }>
