@@ -127,7 +127,7 @@ bloggersRouter.put('/:bloggerId',
     }
 })
 bloggersRouter.delete('/:bloggerId',
-    bearerAuthMiddleware,
+    authMiddleware,
     async(req: Request, res: Response)=>{
     const isDeleted: boolean = await bloggersService.deleteBlogger(req.params.bloggerId)
     if (isDeleted) {
