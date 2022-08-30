@@ -10,6 +10,7 @@ import {bloggerDBType} from "../types/types";
 import {postsService} from "../domain/posts-service";
 import {contentValidation, descValidation, titleValidation} from "./posts-router";
 import {bloggersRepository} from "../repositories/bloggers-db-repository";
+import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
 //import {ipCheckMiddleware} from "../middlewares/ip-check-middleware";
 
 export const bloggersRouter = Router({})
@@ -126,7 +127,7 @@ bloggersRouter.put('/:bloggerId',
     }
 })
 bloggersRouter.delete('/:bloggerId',
-    authMiddleware,
+    bearerAuthMiddleware,
     async(req: Request, res: Response)=>{
     const isDeleted: boolean = await bloggersService.deleteBlogger(req.params.bloggerId)
     if (isDeleted) {
