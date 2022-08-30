@@ -2,8 +2,7 @@ import {CommentDBType} from "../types/types";
 import {commentsCollection} from "./db";
 
 export const commentsRepository = {
-    // comment: any -> looks bad, caused by commentsService
-    async create(comment: any) {
+    async create(comment: CommentDBType): Promise<CommentDBType> {
         await commentsCollection.insertOne(comment)
         return comment
     },
