@@ -14,7 +14,7 @@ export const usersRepository = {
     async findByLogin(login: string) {
         return await usersCollection.findOne({login: login})
     },
-    async findById(id: any) {
+    async findById(id: ObjectId) {
         return await usersCollection.findOne({_id: id})
     },
     async getUsers(pageNumber: number, pageSize: number) {
