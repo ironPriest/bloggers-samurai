@@ -1,4 +1,4 @@
-import {Router} from "express";
+import {Request, Response, Router} from "express";
 import {commentsService} from "../domain/comments-service";
 import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
 
@@ -18,8 +18,8 @@ commentsRouter
             res.sendStatus(404)
         }
     })
-    .delete('/:id', bearerAuthMiddleware, async (req, res) => {
-        const isDeleted = await commentsService.delete(req.params.id)
+    .delete('/:id', bearerAuthMiddleware, async (req: Request, res: Response) => {
+        const isDeleted: boolean = await commentsService.delete(req.params.id)
         if (isDeleted) {
             res.sendStatus(204)
         } else {

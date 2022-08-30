@@ -33,7 +33,7 @@ export const commentsService = {
     async updateComment(id: string, content: string) {
         return commentsRepository.updateComment(id, content)
     },
-    async delete(id: string) {
-        return commentsRepository.delete(id)
+    async delete(id: string): Promise<boolean> {
+        return await commentsRepository.delete(id)
     }
 }
