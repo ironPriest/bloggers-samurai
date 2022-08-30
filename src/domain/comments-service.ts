@@ -24,8 +24,8 @@ export const commentsService = {
             addedAt: createdComment.addedAt
         }
     },
-    async getPostComments(postId: string) {
-        return await commentsRepository.findPostComments(postId)
+    async getPostComments(postId: string, pageNumber: number, pageSize: number) {
+        return await commentsRepository.findPostComments(postId, pageNumber, pageSize)
     },
     async getCommentById(id: string) {
         return await commentsRepository.findCommentById(id)

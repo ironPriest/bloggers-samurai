@@ -115,7 +115,12 @@ postsRouter.post('/:postId/comments',
     res.status(201).send(newComment)
 })
 postsRouter.get('/:postId/comments',
-    async (req, res) => {
-    const comments = commentsService.getPostComments(req.params.postId)
+    async (req: Request, res: Response) => {
+    const pageNumber = req.query.PageNumber? +req.query.PageNumber: 1
+    const pageSize = req.query.PageSize? +req.query.PageSize: 10
+    const comments = await commentsService.getPostComments(
+        req.params.postId,
+        pageNumber,
+        pageSize)
     res.status(200).send(comments)
 })
