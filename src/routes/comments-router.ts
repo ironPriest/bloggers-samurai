@@ -26,7 +26,7 @@ commentsRouter
             res.sendStatus(404)
         }
     })
-    .get('/:id', async (req, res) => {
-        const comment = commentsService.getCommentById(req.params.id)
+    .get('/:id', async (req: Request, res: Response) => {
+        const comment = await commentsService.getCommentById(req.params.id)
         res.status(200).send(comment)
     })
