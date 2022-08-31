@@ -24,4 +24,5 @@ export type CommentDBType = WithId<{
     userId: string | ObjectId
     userLogin: string
     addedAt: Date
+    postId: string
 }>

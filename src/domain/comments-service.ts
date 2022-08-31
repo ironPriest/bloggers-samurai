@@ -5,7 +5,7 @@ import {CommentDBType, UserDBType} from "../types/types";
 import {v4} from "uuid";
 
 export const commentsService = {
-    async create(content: string, userId: ObjectId): Promise<Omit<CommentDBType, "_id">> {
+    async create(content: string, userId: ObjectId, postId: string): Promise<Omit<CommentDBType, "_id" | "postId">> {
         const user: UserDBType | void | null = await usersRepository.findById(userId)
         let comment: CommentDBType = {
             _id: new ObjectId(),
@@ -13,7 +13,8 @@ export const commentsService = {
             content: content,
             userId: user!.id,
             userLogin: user!.login,
-            addedAt: new Date()
+            addedAt: new Date(),
+            postId: postId
         }
         const createdComment = await commentsRepository.create(comment)
         return {
