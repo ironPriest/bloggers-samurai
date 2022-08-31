@@ -22,7 +22,7 @@ export const commentsRepository = {
         }
     },
     async findCommentById(id: string) {
-        return await commentsCollection.findOne({id: id})
+        return await commentsCollection.findOne({id: id}, {projection: {_id: 0} })
     },
     async updateComment(id: string, content: string) {
         let result = await commentsCollection.updateOne({id: id}, {$set: {content: content}})
