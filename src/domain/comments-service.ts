@@ -11,7 +11,7 @@ export const commentsService = {
             _id: new ObjectId(),
             id: v4(),
             content: content,
-            userId: userId,
+            userId: user!.id,
             userLogin: user!.login,
             addedAt: new Date()
         }
