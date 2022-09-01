@@ -29,10 +29,21 @@ commentsRouter
             res.sendStatus(404)
         }
     })
-    .delete('/:id', bearerAuthMiddleware, async (req: Request, res: Response) => {
-        const isDeleted: boolean = await commentsService.delete(req.params.id)
-        if (isDeleted) {
-            res.sendStatus(204)
+    .delete('/:id',
+        bearerAuthMiddleware,
+        async (req: Request, res: Response) => {
+        const comment = await commentsService.getCommentById(req.params.id)
+        if (comment) {
+            if (req.user!.id !== comment.userId) {
+                res.sendStatus(403)
+            } else {
+                const isDeleted: boolean = await commentsService.delete(req.params.id)
+                if (isDeleted) {
+                    res.sendStatus(204)
+                } else {
+                    res.sendStatus(404)
+                }
+            }
         } else {
             res.sendStatus(404)
         }
