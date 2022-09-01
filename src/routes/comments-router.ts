@@ -50,5 +50,10 @@ commentsRouter
     })
     .get('/:id', async (req: Request, res: Response) => {
         const comment = await commentsService.getCommentById(req.params.id)
-        res.status(200).send(comment)
+        if (comment) {
+            res.status(200).send(comment)
+        } else {
+            res.sendStatus(404)
+        }
+
     })
