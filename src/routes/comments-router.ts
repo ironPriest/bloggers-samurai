@@ -7,21 +7,22 @@ import {inputValidationMiddleware} from "../middlewares/input-validation-middlew
 export const commentsRouter = Router({})
 
 commentsRouter
-    // .get('/:postId', async (req, res) => {
-    //     const comments = commentsService.getPostComments(req.params.postId)
-    //     res.status(201).send(comments)
-    // })
     .put('/:id',
         bearerAuthMiddleware,
         commentValidation,
         inputValidationMiddleware,
         async (req, res) =>{
-        const isUpdated = await commentsService.updateComment(req.params.id, req.body.content)
-        if (isUpdated) {
-            const comment = await commentsService.getCommentById(req.params.id)
-            res.sendStatus(204)
+        const comment = await commentsService.getCommentById(req.params.id)
+        if (req.user!.id !== comment!.userId) {
+            res.sendStatus(403)
         } else {
-            res.sendStatus(404)
+            const isUpdated = await commentsService.updateComment(req.params.id, req.body.content)
+            if (isUpdated) {
+                const comment = await commentsService.getCommentById(req.params.id)
+                res.sendStatus(204)
+            } else {
+                res.sendStatus(404)
+            }
         }
     })
     .delete('/:id', bearerAuthMiddleware, async (req: Request, res: Response) => {
