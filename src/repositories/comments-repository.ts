@@ -7,7 +7,7 @@ export const commentsRepository = {
         return comment
     },
     async findPostComments(postId: string, pageNumber: number, pageSize: number) {
-        let totalCount = await commentsCollection.count()
+        let totalCount = await commentsCollection.countDocuments({postId: postId})
         let pageCount = Math.ceil(+totalCount / pageSize)
         return {
             "pagesCount": pageCount,
