@@ -111,19 +111,29 @@ postsRouter.delete('/:postId',
 postsRouter.post('/:postId/comments',
     bearerAuthMiddleware,
     async(req: Request, res: Response) => {
-    const newComment = await commentsService.create(
-        req.body.content,
-        req.user!._id,
-        req.params.postId)
-    res.status(201).send(newComment)
+    const post = await postsService.getPostById(req.params.postId)
+    if (!post) {
+        res.sendStatus(404)
+    } else {
+        const newComment = await commentsService.create(
+            req.body.content,
+            req.user!._id,
+            req.params.postId)
+        res.status(201).send(newComment)
+    }
 })
 postsRouter.get('/:postId/comments',
     async (req: Request, res: Response) => {
-    const pageNumber = req.query.PageNumber? +req.query.PageNumber: 1
-    const pageSize = req.query.PageSize? +req.query.PageSize: 10
-    const comments = await commentsService.getPostComments(
-        req.params.postId,
-        pageNumber,
-        pageSize)
-    res.status(200).send(comments)
+        const post = await postsService.getPostById(req.params.postId)
+        if (!post) {
+            res.sendStatus(404)
+        } else {
+            const pageNumber = req.query.PageNumber ? +req.query.PageNumber : 1
+            const pageSize = req.query.PageSize ? +req.query.PageSize : 10
+            const comments = await commentsService.getPostComments(
+                req.params.postId,
+                pageNumber,
+                pageSize)
+            res.status(200).send(comments)
+        }
 })
