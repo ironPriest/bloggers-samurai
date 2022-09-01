@@ -25,8 +25,13 @@ export const contentValidation = body('content')
     .isLength({max: 1000})
 
 export const bloggerIdValidation = body('bloggerId')
-    //.isInt()
     .exists({checkFalsy: true})
+
+export const commentValidation = body('content')
+    .exists({checkFalsy: true})
+    .isString()
+    .isLength({min: 20})
+    .isLength({max: 300})
 
 postsRouter.get('/', async(req: Request, res: Response ) => {
     const PageNumber = req.query.PageNumber? +req.query.PageNumber: 1
@@ -110,6 +115,8 @@ postsRouter.delete('/:postId',
 })
 postsRouter.post('/:postId/comments',
     bearerAuthMiddleware,
+    commentValidation,
+    inputValidationMiddleware,
     async(req: Request, res: Response) => {
     const post = await postsService.getPostById(req.params.postId)
     if (!post) {

@@ -1,6 +1,8 @@
 import {Request, Response, Router} from "express";
 import {commentsService} from "../domain/comments-service";
 import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
+import {commentValidation} from "./posts-router";
+import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 
 export const commentsRouter = Router({})
 
@@ -9,7 +11,11 @@ commentsRouter
     //     const comments = commentsService.getPostComments(req.params.postId)
     //     res.status(201).send(comments)
     // })
-    .put('/:id', bearerAuthMiddleware, async (req, res) =>{
+    .put('/:id',
+        bearerAuthMiddleware,
+        commentValidation,
+        inputValidationMiddleware,
+        async (req, res) =>{
         const isUpdated = await commentsService.updateComment(req.params.id, req.body.content)
         if (isUpdated) {
             const comment = await commentsService.getCommentById(req.params.id)
