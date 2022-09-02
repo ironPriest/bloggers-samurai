@@ -4,6 +4,7 @@ export type bloggerDBType = WithId<{
     id: string
     name: string
     youtubeUrl: string
+    addedAt: Date
 }>
 export type postDBType = WithId<{
     id: string

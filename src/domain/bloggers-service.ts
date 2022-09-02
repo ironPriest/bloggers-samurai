@@ -13,7 +13,8 @@ export const bloggersService = {
             return {
                 id: blogger.id,
                 name: blogger.name,
-                youtubeUrl: blogger.youtubeUrl
+                youtubeUrl: blogger.youtubeUrl,
+                addedAt: blogger.addedAt
             }
         } else {
             return null
@@ -25,13 +26,15 @@ export const bloggersService = {
             _id: new ObjectId(),
             id: v4(),
             name: name,
-            youtubeUrl: youtubeUrl
+            youtubeUrl: youtubeUrl,
+            addedAt: new Date()
         }
         const createdBlogger = await bloggersRepository.createBlogger(newBlogger)
         return {
             id: createdBlogger.id,
             name: createdBlogger.name,
-            youtubeUrl: createdBlogger.youtubeUrl
+            youtubeUrl: createdBlogger.youtubeUrl,
+            addedAt: createdBlogger.addedAt
         }
     },
     async updateBlogger(bloggerId: string, name: string, youtubeUrl: string): Promise<boolean> {
