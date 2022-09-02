@@ -16,6 +16,7 @@ export const bloggersRepository = {
             "totalCount": totalCount,
             "items": await bloggersCollection
                 .find(filter, {projection:{_id: 0}})
+                .sort({"createdAt": -1})
                 .skip((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray()
