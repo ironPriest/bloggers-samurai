@@ -14,7 +14,8 @@ export const postsService = {
                 shortDescription: post.shortDescription,
                 content: post.content,
                 bloggerId: post.bloggerId,
-                bloggerName: post.bloggerName
+                bloggerName: post.bloggerName,
+                createdAt: post.createdAt
             }
         } else {
             return null
@@ -34,7 +35,8 @@ export const postsService = {
                 shortDescription: createdPost.shortDescription,
                 content: createdPost.content,
                 bloggerId: createdPost.bloggerId,
-                bloggerName: createdPost.bloggerName
+                bloggerName: createdPost.bloggerName,
+                createdAt: createdPost.createdAt
             }
         } else {
             return

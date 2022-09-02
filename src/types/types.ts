@@ -13,6 +13,7 @@ export type postDBType = WithId<{
     content: string
     bloggerId: string
     bloggerName: string | undefined
+    createdAt: Date
 }>
 export type UserDBType = WithId<{
     id: string

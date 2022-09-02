@@ -42,7 +42,8 @@ export const postsRepository = {
                     shortDescription: shortDescription,
                     content: content,
                     bloggerId: bloggerId,
-                    bloggerName: blogger?.name
+                    bloggerName: blogger?.name,
+                    createdAt: new Date()
                 })
                 return newPost
             } else {
