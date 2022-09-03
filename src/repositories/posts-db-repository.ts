@@ -4,13 +4,25 @@ import {ObjectId} from "mongodb";
 import {v4} from "uuid";
 
 export const postsRepository = {
-    async getPosts(pageNumber: number, pageSize: number, bloggerId: string | null | undefined) {
+    async getPosts(
+        pageNumber: number,
+        pageSize: number,
+        bloggerId: string | null | undefined,
+        sortBy: string,
+        sortDirection: string) {
         const filter: any = {}
         if (bloggerId) {
             filter.bloggerId = bloggerId
         }
         let totalCount = await postsCollection.count(filter)
         let pageCount = Math.ceil(+totalCount / pageSize)
+        const sortFilter: any = {}
+        switch (sortDirection) {
+            case ('Asc'): sortFilter.sortBy = 1
+            break
+            case ('Desc'): sortFilter.sortBy = -1
+            break
+        }
         return {
             "pagesCount": pageCount,
             "page": pageNumber,
@@ -18,6 +30,7 @@ export const postsRepository = {
             "totalCount": totalCount,
             "items": await postsCollection
                 .find(filter, {projection:{_id: 0}})
+                .sort(sortFilter)
                 .skip((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray()

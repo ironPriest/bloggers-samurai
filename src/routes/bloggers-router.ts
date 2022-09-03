@@ -62,12 +62,16 @@ bloggersRouter.get('/:bloggerId/posts',
     async(req: Request, res: Response) => {
     let blogger = await bloggersService.getBloggerById(req.params.bloggerId)
     if (blogger) {
-        const PageNumber = req.query.PageNumber? +req.query.PageNumber: 1
-        const PageSize = req.query.PageSize? +req.query.PageSize: 10
+        const pageNumber = req.query.pageNumber? +req.query.pageNumber: 1
+        const pageSize = req.query.pageSize? +req.query.pageSize: 10
+        const sortBy = req.query.sortBy? req.query.sortBy.toString(): 'createdAt'
+        const sortDirection = req.query.sortDirection? req.query.sortDirection.toString(): 'Desc'
         const posts = await postsService.getPosts(
-            PageNumber,
-            PageSize,
-            req.params.bloggerId)
+            pageNumber,
+            pageSize,
+            req.params.bloggerId,
+            sortBy,
+            sortDirection)
         res.send(posts)
     } else {
         res.send(404)

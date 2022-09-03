@@ -2,8 +2,18 @@ import {postDBType} from "../types/types";
 import {postsRepository} from "../repositories/posts-db-repository";
 
 export const postsService = {
-    async getPosts(pageNumber: number, pageSize: number, bloggerId: string | null | undefined) {
-        return await postsRepository.getPosts(pageNumber, pageSize, bloggerId)
+    async getPosts(
+        pageNumber: number,
+        pageSize: number,
+        bloggerId: string | null | undefined,
+        sortBy: string,
+        sortDirection: string) {
+            return await postsRepository.getPosts(
+                pageNumber,
+                pageSize,
+                bloggerId,
+                sortBy,
+                sortDirection)
     },
     async getPostById(postId: string): Promise<Omit<postDBType, '_id'> | null> {
         let post: postDBType | null | void = await postsRepository.getPostById(postId)
@@ -22,11 +32,7 @@ export const postsService = {
         }
 
     },
-    async createPost(
-        title: string,
-        shortDescription: string,
-        content: string,
-        bloggerId: string): Promise<Omit<postDBType, "_id"> | undefined> {
+    async createPost(title: string, shortDescription: string, content: string, bloggerId: string): Promise<Omit<postDBType, "_id"> | undefined> {
         const createdPost = await postsRepository.createPost(title, shortDescription, content, bloggerId)
         if (createdPost) {
             return {
@@ -43,15 +49,10 @@ export const postsService = {
         }
 
     },
-    async updatePost(
-        postId: string,
-        title: string,
-        shortDescription: string,
-        content: string,
-        bloggerId: string): Promise<number> {
+    async updatePost(postId: string, title: string, shortDescription: string, content: string, bloggerId: string): Promise<number> {
         return postsRepository.updatePost(postId, title, shortDescription, content, bloggerId)
     },
     async deletePost(postId: string): Promise<boolean> {
-        return  postsRepository.deletePost(postId)
+        return postsRepository.deletePost(postId)
     }
 }
