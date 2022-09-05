@@ -30,7 +30,7 @@ export const postsRepository = {
             "totalCount": totalCount,
             "items": await postsCollection
                 .find(filter, {projection:{_id: 0}})
-                .sort({"createdAt": 1})
+                .sort({"createdAt": -1})
                 .skip((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray()
