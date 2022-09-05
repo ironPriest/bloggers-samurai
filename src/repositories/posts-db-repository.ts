@@ -17,12 +17,12 @@ export const postsRepository = {
         let totalCount = await postsCollection.count(filter)
         let pageCount = Math.ceil(+totalCount / pageSize)
         const sortFilter: any = {}
-        // switch (sortDirection) {
-        //     case ('Asc'): sortFilter.sortBy = 1
-        //     break
-        //     case ('Desc'): sortFilter.sortBy = -1
-        //     break
-        // }
+        switch (sortDirection) {
+            case ('Asc'): sortFilter.createdAt = 1
+            break
+            case ('Desc'): sortFilter.createdAt = -1
+            break
+        }
         return {
             "pagesCount": pageCount,
             "page": pageNumber,
@@ -30,7 +30,8 @@ export const postsRepository = {
             "totalCount": totalCount,
             "items": await postsCollection
                 .find(filter, {projection:{_id: 0}})
-                .sort({"createdAt": -1})
+                //.sort({"createdAt": -1})
+                .sort(sortFilter)
                 .skip((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray()
