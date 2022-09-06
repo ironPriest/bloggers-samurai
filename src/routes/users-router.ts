@@ -34,8 +34,8 @@ usersRouter.post('/',
 })
 
 usersRouter.get('/', async (req, res) => {
-    const pageNumber = req.query.PageNumber? +req.query.PageNumber: 1
-    const pageSize = req.query.PageSize? +req.query.PageSize: 10
+    const pageNumber = req.query.pageNumber? +req.query.pageNumber: 1
+    const pageSize = req.query.pageSize? +req.query.pageSize: 10
     const sortBy = req.query.sortBy? req.query.sortBy.toString(): 'createdAt'
     const sortDirection = req.query.sortDirection? req.query.sortDirection.toString(): 'Desc'
     const users = await usersService.getUsers(
