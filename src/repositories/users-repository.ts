@@ -17,16 +17,37 @@ export const usersRepository = {
     async findById(id: ObjectId) {
         return await usersCollection.findOne({_id: id})
     },
-    async getUsers(pageNumber: number, pageSize: number) {
-        let totalCount = await usersCollection.count()
+    async getUsers(
+            searchLoginTerm: string | undefined,
+            searchEmailTerm: string | undefined,
+            pageNumber: number,
+            pageSize: number,
+            sortBy: string,
+            sortDirection: string) {
+        const filter: any = {}
+        if (searchLoginTerm) {
+            filter.name = {$regex: searchLoginTerm, $options: 'i'}
+        }
+        if (searchEmailTerm) {
+            filter.name = {$regex: searchEmailTerm, $options: 'i'}
+        }
+        let totalCount = await usersCollection.count(filter)
         let pageCount = Math.ceil(+totalCount / pageSize)
+        const sortFilter: any = {}
+        switch (sortDirection) {
+            case ('Asc'): sortFilter[sortBy] = 1
+                break
+            case ('Desc'): sortFilter[sortBy] = -1
+                break
+        }
         return {
             "pagesCount": pageCount,
             "page": pageNumber,
             "pageSize": pageSize,
             "totalCount": totalCount,
             "items": await usersCollection
-                .find({}, {projection: {_id: 0, passwordHash: 0}})
+                .find(filter, {projection: {_id: 0, passwordHash: 0}})
+                .sort(sortFilter)
                 .skip((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray()

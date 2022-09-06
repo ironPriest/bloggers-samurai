@@ -37,8 +37,20 @@ export const usersService = {
             return null
         }
     },
-    async getUsers(pageNumber: number, pageSize: number) {
-        return await usersRepository.getUsers(pageNumber, pageSize)
+    async getUsers(
+            searchLoginTerm: string | undefined,
+            searchEmailTerm: string | undefined,
+            pageNumber: number,
+            pageSize: number,
+            sortBy: string,
+            sortDirection: string) {
+        return await usersRepository.getUsers(
+            searchLoginTerm,
+            searchEmailTerm,
+            pageNumber,
+            pageSize,
+            sortBy,
+            sortDirection)
     },
     async delete(id: string) {
         return usersRepository.delete(id)

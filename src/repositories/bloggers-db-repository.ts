@@ -3,11 +3,11 @@ import {bloggersCollection} from "./db";
 
 export const bloggersRepository = {
     async getBloggers(
-        searchTerm: string | undefined,
-        pageNumber: number,
-        pageSize: number,
-        sortBy: string,
-        sortDirection: string) {
+            searchTerm: string | undefined,
+            pageNumber: number,
+            pageSize: number,
+            sortBy: string,
+            sortDirection: string) {
         const filter: any = {}
         if (searchTerm) {
             filter.name = {$regex: searchTerm, $options: 'i'}
