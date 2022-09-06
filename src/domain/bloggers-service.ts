@@ -4,8 +4,18 @@ import {bloggersRepository} from "../repositories/bloggers-db-repository"
 import {v4} from 'uuid';
 
 export const bloggersService = {
-    async getBloggers(searchTerm: string | undefined, pageNumber: number, pageSize: number) {
-        return await bloggersRepository.getBloggers(searchTerm, pageNumber, pageSize)
+    async getBloggers(
+        searchTerm: string | undefined,
+        pageNumber: number,
+        pageSize: number,
+        sortBy: string,
+        sortDirection: string) {
+            return await bloggersRepository.getBloggers(
+                searchTerm,
+                pageNumber,
+                pageSize,
+                sortBy,
+                sortDirection)
     },
     async getBloggerById(bloggerId: string): Promise<Omit<bloggerDBType, '_id'> | null> {
         let blogger: bloggerDBType | null | void = await bloggersRepository.getBloggerById(bloggerId)

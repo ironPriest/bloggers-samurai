@@ -42,10 +42,14 @@ const bloggerIdValidation = param('bloggerId').custom(async (bloggerId, ) => {
 bloggersRouter.get('/', async(req: Request, res: Response) => {
     const pageNumber = req.query.pageNumber? +req.query.pageNumber: 1
     const pageSize = req.query.pageSize? +req.query.pageSize: 10
+    const sortBy = req.query.sortBy? req.query.sortBy.toString(): 'createdAt'
+    const sortDirection = req.query.sortDirection? req.query.sortDirection.toString(): 'Desc'
     const bloggers = await bloggersService.getBloggers(
         req.query.SearchNameTerm?.toString(),
         pageNumber,
-        pageSize)
+        pageSize,
+        sortBy,
+        sortDirection)
     res.send(bloggers)
 })
 bloggersRouter.get('/:bloggerId', async(req: Request, res: Response) => {

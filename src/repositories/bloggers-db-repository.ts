@@ -2,13 +2,25 @@ import {bloggerDBType} from "../types/types";
 import {bloggersCollection} from "./db";
 
 export const bloggersRepository = {
-    async getBloggers(searchTerm: string | undefined, pageNumber: number, pageSize: number) {
+    async getBloggers(
+        searchTerm: string | undefined,
+        pageNumber: number,
+        pageSize: number,
+        sortBy: string,
+        sortDirection: string) {
         const filter: any = {}
         if (searchTerm) {
             filter.name = {$regex: searchTerm}
         }
         let totalCount = await bloggersCollection.count(filter)
         let pageCount = Math.ceil( +totalCount / pageSize)
+        const sortFilter: any = {}
+        switch (sortDirection) {
+            case ('Asc'): sortFilter.createdAt = 1
+                break
+            case ('Desc'): sortFilter.createdAt = -1
+                break
+        }
         return {
             "pagesCount": pageCount,
             "page": pageNumber,
@@ -16,7 +28,7 @@ export const bloggersRepository = {
             "totalCount": totalCount,
             "items": await bloggersCollection
                 .find(filter, {projection:{_id: 0}})
-                .sort({"createdAt": -1})
+                .sort(sortFilter)
                 .skip((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray()
