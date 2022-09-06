@@ -26,10 +26,10 @@ export const usersRepository = {
             sortDirection: string) {
         const filter: any = {}
         if (searchLoginTerm) {
-            filter.name = {$regex: searchLoginTerm, $options: 'i'}
+            filter.login = {$regex: searchLoginTerm, $options: 'i'}
         }
         if (searchEmailTerm) {
-            filter.name = {$regex: searchEmailTerm, $options: 'i'}
+            filter.email = {$regex: searchEmailTerm, $options: 'i'}
         }
         let totalCount = await usersCollection.count(filter)
         let pageCount = Math.ceil(+totalCount / pageSize)
