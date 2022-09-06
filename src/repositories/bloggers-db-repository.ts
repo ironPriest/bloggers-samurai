@@ -10,7 +10,7 @@ export const bloggersRepository = {
         sortDirection: string) {
         const filter: any = {}
         if (searchTerm) {
-            filter.name = {$regex: searchTerm}
+            filter.name = {$regex: searchTerm, $options: 'i'}
         }
         let totalCount = await bloggersCollection.count(filter)
         let pageCount = Math.ceil( +totalCount / pageSize)
