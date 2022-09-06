@@ -24,14 +24,15 @@ export const usersRepository = {
             pageSize: number,
             sortBy: string,
             sortDirection: string) {
-        const filter: any = {}
+        const loginFilter: any = {}
+        const emailFilter: any = {}
         if (searchLoginTerm) {
-            filter.login = {$regex: searchLoginTerm, $options: 'i'}
+            loginFilter.login = {$regex: searchLoginTerm, $options: 'i'}
         }
         if (searchEmailTerm) {
-            filter.email = {$regex: searchEmailTerm, $options: 'i'}
+            emailFilter.email = {$regex: searchEmailTerm, $options: 'i'}
         }
-        let totalCount = await usersCollection.count(filter)
+        let totalCount = await usersCollection.count({$or:[loginFilter, emailFilter]})
         let pageCount = Math.ceil(+totalCount / pageSize)
         const sortFilter: any = {}
         switch (sortDirection) {
@@ -46,7 +47,7 @@ export const usersRepository = {
             "pageSize": pageSize,
             "totalCount": totalCount,
             "items": await usersCollection
-                .find(filter, {projection: {_id: 0, passwordHash: 0}})
+                .find({$or:[loginFilter, emailFilter]}, {projection: {_id: 0, passwordHash: 0}})
                 .sort(sortFilter)
                 .skip((pageNumber - 1) * pageSize)
                 .limit(pageSize)
