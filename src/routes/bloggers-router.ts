@@ -25,7 +25,7 @@ const nameValidation = body('name')
     .isLength({max: 15})
 
 const youtubeUrlValidation = body('youtubeUrl')
-    .trim()
+    //.trim()
     .exists({checkFalsy: true})
     .isLength({max: 100})
     .matches('^https://([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$')
