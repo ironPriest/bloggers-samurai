@@ -19,6 +19,8 @@ export type UserDBType = WithId<{
     id: string
     login: string
     passwordHash: string
+    email: string
+    createdAt: Date
 }>
 export type CommentDBType = WithId<{
     id: string

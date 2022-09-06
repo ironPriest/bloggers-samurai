@@ -4,23 +4,29 @@ import {authService} from "./auth-service";
 import {v4} from "uuid";
 
 export const usersService = {
-    async create(login: string, password: string) {
+    async create(
+            login: string,
+            password: string,
+            email: string) {
         const passwordHash = await authService.generateHash(password)
-        const user = {
+        let user = {
             _id: new ObjectId(),
             id: v4(),
             login,
-            passwordHash
+            passwordHash,
+            email,
+            createdAt: new Date()
         }
         let res = await usersRepository.create(user)
         if(!res){
             console.log("error")
             return
         }
-
         return {
             id: user.id,
-            login: user.login
+            login: user.login,
+            email: user.email,
+            createdAt: user.createdAt
         }
     },
     async findById(userId: any) {
