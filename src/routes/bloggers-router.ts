@@ -45,7 +45,7 @@ bloggersRouter.get('/', async(req: Request, res: Response) => {
     const sortBy = req.query.sortBy? req.query.sortBy.toString(): 'createdAt'
     const sortDirection = req.query.sortDirection? req.query.sortDirection.toString(): 'Desc'
     const bloggers = await bloggersService.getBloggers(
-        req.query.SearchNameTerm?.toString(),
+        req.query.searchNameTerm?.toString(),
         pageNumber,
         pageSize,
         sortBy,
