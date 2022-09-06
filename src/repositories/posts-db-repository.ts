@@ -18,9 +18,9 @@ export const postsRepository = {
         let pageCount = Math.ceil(+totalCount / pageSize)
         const sortFilter: any = {}
         switch (sortDirection) {
-            case ('Asc'): sortFilter.createdAt = 1
+            case ('Asc'): sortFilter[sortBy] = 1
             break
-            case ('Desc'): sortFilter.createdAt = -1
+            case ('Desc'): sortFilter[sortBy] = -1
             break
         }
         return {
