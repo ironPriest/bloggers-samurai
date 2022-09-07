@@ -21,8 +21,8 @@ const passwordValidation = body('password')
     .isLength({max: 20})
 
 const emailValidation = body('email')
-    .exists({checkFalsy: true})
-    .isString()
+    //.exists({checkFalsy: true})
+    //.isString()
     .matches('^https://([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$')
 
 usersRouter.post('/',
