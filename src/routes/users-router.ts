@@ -23,7 +23,7 @@ const passwordValidation = body('password')
 const emailValidation = body('email')
     .exists({checkFalsy: true})
     .isString()
-    .matches('^https://([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$\n')
+    .matches('^https://([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$')
 
 usersRouter.post('/',
     authMiddleware,
