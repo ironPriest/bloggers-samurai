@@ -1,11 +1,12 @@
 import {Request, Response, Router} from "express";
 import {authMiddleware} from "../middlewares/auth-middleware";
-import {body} from "express-validator";
+import {body, param} from "express-validator";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 import {postDBType} from "../types/types";
 import {postsService} from "../domain/posts-service";
 import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
 import {commentsService} from "../domain/comments-service";
+import {bloggersService} from "../domain/bloggers-service";
 
 export const postsRouter = Router({})
 
@@ -26,6 +27,14 @@ export const contentValidation = body('content')
 
 export const bloggerIdValidation = body('bloggerId')
     .exists({checkFalsy: true})
+    .custom(async (bloggerId, ) => {
+        const blogger = await bloggersService.getBloggerById(bloggerId)
+        //console.log(blogger, 'blogger')
+        if (!blogger) {
+            throw new Error('such blogger doesnt exist')
+        }
+        return true
+    })
 
 export const commentValidation = body('content')
     .exists({checkFalsy: true})
