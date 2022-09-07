@@ -25,9 +25,12 @@ const nameValidation = body('name')
     .isLength({max: 15})
 
 const youtubeUrlValidation = body('youtubeUrl')
-    //.trim()
+    .trim()
+    .bail()
     .exists({checkFalsy: true})
+    .bail()
     .isLength({max: 100})
+    .bail()
     .matches('^https://([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$')
 
 const bloggerIdValidation = param('bloggerId').custom(async (bloggerId, ) => {
@@ -83,8 +86,8 @@ bloggersRouter.get('/:bloggerId/posts',
 })
 bloggersRouter.post('/',
     authMiddleware,
-    youtubeUrlValidation,
     nameValidation,
+    youtubeUrlValidation,
     inputValidationMiddleware,
     async(req: Request, res: Response) => {
     const newBlogger = await bloggersService.createBlogger(
