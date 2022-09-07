@@ -20,10 +20,16 @@ const passwordValidation = body('password')
     .isLength({min: 6})
     .isLength({max: 20})
 
+const emailValidation = body('email')
+    .exists({checkFalsy: true})
+    .isString()
+    .matches('^https://([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$\n')
+
 usersRouter.post('/',
     authMiddleware,
     loginValidation,
     passwordValidation,
+    emailValidation,
     inputValidationMiddleware,
     async(req: Request, res: Response) => {
     const newUser = await usersService.create(
