@@ -150,10 +150,14 @@ postsRouter.get('/:postId/comments',
         } else {
             const pageNumber = req.query.PageNumber ? +req.query.PageNumber : 1
             const pageSize = req.query.PageSize ? +req.query.PageSize : 10
+            const sortBy = req.query.sortBy? req.query.sortBy.toString(): 'createdAt'
+            const sortDirection = req.query.sortDirection? req.query.sortDirection.toString(): 'Desc'
             const comments = await commentsService.getPostComments(
                 req.params.postId,
                 pageNumber,
-                pageSize)
+                pageSize,
+                sortBy,
+                sortDirection)
             res.status(200).send(comments)
         }
 })

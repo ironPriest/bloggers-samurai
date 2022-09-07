@@ -6,9 +6,21 @@ export const commentsRepository = {
         await commentsCollection.insertOne(comment)
         return comment
     },
-    async findPostComments(postId: string, pageNumber: number, pageSize: number) {
+    async findPostComments(
+            postId: string,
+            pageNumber: number,
+            pageSize: number,
+            sortBy: string,
+            sortDirection: string) {
         let totalCount = await commentsCollection.countDocuments({postId: postId})
         let pageCount = Math.ceil(+totalCount / pageSize)
+        const sortFilter: any = {}
+        switch (sortDirection) {
+            case ('Asc'): sortFilter[sortBy] = 1
+                break
+            case ('Desc'): sortFilter[sortBy] = -1
+                break
+        }
         return {
             "pagesCount": pageCount,
             "page": pageNumber,
@@ -16,6 +28,7 @@ export const commentsRepository = {
             "totalCount": totalCount,
             "items": await commentsCollection
                 .find( {postId: postId}, {projection:{_id: 0, postId: 0}})
+                .sort(sortFilter)
                 .skip((pageNumber - 1) * pageSize)
                 .limit(pageSize)
                 .toArray()
