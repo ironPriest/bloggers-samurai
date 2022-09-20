@@ -18,7 +18,7 @@ app.use(cors())
 const parserMiddleware = bodyParser.json()
 app.use(parserMiddleware)
 
-app.use('/bloggers', bloggersRouter)
+app.use('/blogs', bloggersRouter)
 app.use('/posts', postsRouter)
 app.use('/users', usersRouter)
 app.use('/auth', authRouter)
