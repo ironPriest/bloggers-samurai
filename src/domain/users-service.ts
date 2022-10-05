@@ -8,7 +8,7 @@ export const usersService = {
             login: string,
             password: string,
             email: string) {
-        const passwordHash = await authService.generateHash(password)
+        const passwordHash = await authService._generateHash(password)
         let user = {
             _id: new ObjectId(),
             id: v4(),

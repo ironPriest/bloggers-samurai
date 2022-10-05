@@ -22,6 +22,12 @@ export type UserDBType = WithId<{
     email: string
     createdAt: Date
 }>
+export type EmailConfirmationDBType = WithId<{
+    userId: string
+    confirmationCode: string
+    expirationDate: Date
+    isConfirmed: boolean
+}>
 export type CommentDBType = WithId<{
     id: string
     content: string
