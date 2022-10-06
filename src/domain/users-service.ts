@@ -37,6 +37,22 @@ export const usersService = {
             return null
         }
     },
+    async findByLogin(login: string) {
+        let user = await usersRepository.findByLogin(login)
+        if (user) {
+            return user
+        } else {
+            return null
+        }
+    },
+    async findByEmail(email: string) {
+        let user = await usersRepository.findByEmail(email)
+        if (user) {
+            return user
+        } else {
+            return null
+        }
+    },
     async getUsers(
             searchLoginTerm: string | undefined,
             searchEmailTerm: string | undefined,

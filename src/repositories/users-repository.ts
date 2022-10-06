@@ -17,6 +17,9 @@ export const usersRepository = {
     async findById(id: ObjectId) {
         return await usersCollection.findOne({_id: id})
     },
+    async findByEmail(email: string) {
+        return await usersCollection.findOne({email: email})
+    },
     async getUsers(
             searchLoginTerm: string | undefined,
             searchEmailTerm: string | undefined,
