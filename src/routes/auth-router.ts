@@ -51,3 +51,7 @@ authRouter.post(
         req.body.email)
     res.sendStatus(204)
 })
+
+authRouter.post('/egistration-email-resending', async(req: Request, res: Response) => {
+    res.sendStatus(204)
+})

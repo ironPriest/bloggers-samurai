@@ -17,7 +17,7 @@ export const usersRepository = {
     async findById(id: ObjectId) {
         return await usersCollection.findOne({_id: id})
     },
-    async findByEmail(email: string) {
+    async findByEmail(email: string): Promise<UserDBType | null> {
         return await usersCollection.findOne({email: email})
     },
     async getUsers(

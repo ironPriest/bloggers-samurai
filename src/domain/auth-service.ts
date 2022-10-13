@@ -36,6 +36,18 @@ export const authService = {
             emailConformation.confirmationCode)
         return creationResult
     },
+    async confirmationResend (email: string) {
+        let user: UserDBType | null = await usersRepository.findByEmail(email)
+        if (user) {
+            let userId = user.id
+            let newConfirmationCode = v4()
+            await emailConfirmationRepository.update(userId, newConfirmationCode)
+            await emailService.register(email, 'subject', newConfirmationCode)
+        } else {
+            return null
+        }
+
+    },
     async _generateHash(password: string) {
         return await bcrypt.hash(password, 10)
     },
