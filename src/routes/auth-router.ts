@@ -53,5 +53,6 @@ authRouter.post(
 })
 
 authRouter.post('/registration-email-resending', async(req: Request, res: Response) => {
+    await authService.confirmationResend(req.body.email)
     res.sendStatus(204)
 })
