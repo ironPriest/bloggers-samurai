@@ -36,6 +36,12 @@ export const authService = {
             emailConformation.confirmationCode)
         return creationResult
     },
+    async confirm (code: string) {
+        let confirmation = await emailConfirmationRepository.findByCode(code)
+        if (confirmation) {
+            await emailConfirmationRepository.updateStatus(confirmation.userId)
+        }
+    },
     async confirmationResend (email: string) {
         let user: UserDBType | null = await usersRepository.findByEmail(email)
         if (user) {

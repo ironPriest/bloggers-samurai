@@ -8,5 +8,11 @@ export const emailConfirmationRepository = {
     async update(userId: string, newConfirmaionCode: string) {
         await emailConfirmationsCollection.updateOne({userId: userId}, {$set: {confirmationCode: newConfirmaionCode}})
 
-    }
+    },
+    async updateStatus(userId: string) {
+        await emailConfirmationsCollection.updateOne({userId: userId}, {$set:{isConfirmed: true}})
+    },
+    async findByCode(code: string) {
+        return await emailConfirmationsCollection.findOne({confirmationCode: code})
+    },
 }
