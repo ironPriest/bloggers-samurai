@@ -6,6 +6,7 @@ import {emailService} from "../domain/email-service";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 import {body} from "express-validator";
 import {usersService} from "../domain/users-service";
+import {emailConfirmationRepository} from "../repositories/emailconfirmation-repository";
 
 
 export const authRouter = Router({})
@@ -24,6 +25,13 @@ const doubleEmailValidation = body('email').custom(async (email, ) => {
         throw new Error('email already exists')
     }
     return true
+})
+
+const doubleCodeValidation = body('code').custom(async (code, ) => {
+    const emailConfirmation = await emailConfirmationRepository.findByCode(code)
+    if (emailConfirmation?.isConfirmed) {
+        throw new Error('already confirmed')
+    }
 })
 
 authRouter.post('/login',
@@ -52,7 +60,9 @@ authRouter.post(
     res.sendStatus(204)
 })
 
-authRouter.post('/registration-confirmation', async(req: Request, res: Response) =>{
+authRouter.post('/registration-confirmation',
+    doubleCodeValidation,
+    async(req: Request, res: Response) =>{
     await authService.confirm(req.body.code)
     res.sendStatus(204)
 })
