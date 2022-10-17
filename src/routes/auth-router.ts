@@ -27,11 +27,14 @@ const doubleEmailValidation = body('email').custom(async (email, ) => {
     return true
 })
 
-const doubleCodeValidation = body('code').custom(async (code, ) => {
+const doubleConfirmValidation = body('code').custom(async (code, ) => {
     const emailConfirmation = await emailConfirmationRepository.findByCode(code)
-    if (emailConfirmation?.isConfirmed === true) {
-        throw new Error('already confirmed')
-    }
+    if (emailConfirmation) {
+        if (emailConfirmation.isConfirmed) {
+            throw new Error('already confirmed')
+        } else return
+    } else throw new Error('no such user')
+
 })
 
 authRouter.post('/login',
@@ -61,7 +64,7 @@ authRouter.post(
 })
 
 authRouter.post('/registration-confirmation',
-    doubleCodeValidation,
+    doubleConfirmValidation,
     async(req: Request, res: Response) =>{
     await authService.confirm(req.body.code)
     res.sendStatus(204)
