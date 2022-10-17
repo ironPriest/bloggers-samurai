@@ -5,8 +5,8 @@ export const emailConfirmationRepository = {
     async create(emailConformation: EmailConfirmationDBType) {
         await emailConfirmationsCollection.insertOne(emailConformation)
     },
-    async update(userId: string, newConfirmaionCode: string) {
-        await emailConfirmationsCollection.updateOne({userId: userId}, {$set: {confirmationCode: newConfirmaionCode}})
+    async update(userId: string, newConfirmationCode: string) {
+        await emailConfirmationsCollection.updateOne({userId: userId}, {$set: {confirmationCode: newConfirmationCode}})
 
     },
     async updateStatus(userId: string) {

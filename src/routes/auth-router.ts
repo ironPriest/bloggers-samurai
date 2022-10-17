@@ -29,7 +29,7 @@ const doubleEmailValidation = body('email').custom(async (email, ) => {
 
 const doubleCodeValidation = body('code').custom(async (code, ) => {
     const emailConfirmation = await emailConfirmationRepository.findByCode(code)
-    if (emailConfirmation?.isConfirmed) {
+    if (emailConfirmation?.isConfirmed === true) {
         throw new Error('already confirmed')
     }
 })
