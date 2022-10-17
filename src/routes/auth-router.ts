@@ -29,7 +29,7 @@ const emailValidation = body('email')
     .trim()
     .exists({checkFalsy: true})
     .isString()
-    //.matches('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$\n')
+    .matches('^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
 
 const doubleLoginValidation = body('login').custom(async (login, ) => {
     const user = await usersService.findByLogin(login)
