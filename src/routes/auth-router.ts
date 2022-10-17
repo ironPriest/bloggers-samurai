@@ -16,7 +16,7 @@ const loginValidation = body('login')
     .exists({checkFalsy: true})
     .isString()
     .isLength({min: 3})
-    .isLength({max: 15})
+    .isLength({max: 10})
 
 const passwordValidation = body('password')
     .trim()
