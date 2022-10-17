@@ -37,6 +37,18 @@ const doubleConfirmValidation = body('code').custom(async (code, ) => {
 
 })
 
+const doubleResendingValidation = body('email').custom(async (email, ) => {
+    const user = await usersService.findByEmail(email)
+    if (user) {
+        const emailConfirmation = await emailConfirmationRepository.findByUserId(user?.id)
+        if (emailConfirmation!.isConfirmed) {
+            throw new Error('already confirmed')
+        } else return
+    } else {
+        throw new Error('no such email')
+    }
+})
+
 authRouter.post('/login',
     async(req: Request, res: Response) => {
     const user = await authService.checkCredentials(req.body.login, req.body.password)
@@ -71,7 +83,10 @@ authRouter.post('/registration-confirmation',
     res.sendStatus(204)
 })
 
-authRouter.post('/registration-email-resending', async(req: Request, res: Response) => {
+authRouter.post('/registration-email-resending',
+    doubleResendingValidation,
+    inputValidationMiddleware,
+    async(req: Request, res: Response) => {
     await authService.confirmationResend(req.body.email)
     res.sendStatus(204)
 })

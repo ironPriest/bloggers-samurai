@@ -15,4 +15,7 @@ export const emailConfirmationRepository = {
     async findByCode(code: string) {
         return await emailConfirmationsCollection.findOne({confirmationCode: code})
     },
+    async findByUserId(userId: string) {
+        return await emailConfirmationsCollection.findOne({userId: userId})
+    }
 }
