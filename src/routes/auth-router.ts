@@ -11,6 +11,26 @@ import {emailConfirmationRepository} from "../repositories/emailconfirmation-rep
 
 export const authRouter = Router({})
 
+const loginValidation = body('login')
+    .trim()
+    .exists({checkFalsy: true})
+    .isString()
+    .isLength({min: 3})
+    .isLength({max: 15})
+
+const passwordValidation = body('password')
+    .trim()
+    .exists({checkFalsy: true})
+    .isString()
+    .isLength({min: 6})
+    .isLength({max: 20})
+
+const emailavalidation = body('email')
+    .trim()
+    .exists({checkFalsy: true})
+    .isString()
+    .matches('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$\n')
+
 const doubleLoginValidation = body('login').custom(async (login, ) => {
     const user = await usersService.findByLogin(login)
     if (user) {
@@ -64,6 +84,9 @@ authRouter.post('/login',
 
 authRouter.post(
     '/registration',
+    loginValidation,
+    passwordValidation,
+    emailavalidation,
     doubleLoginValidation,
     doubleEmailValidation,
     inputValidationMiddleware,
