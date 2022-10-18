@@ -23,7 +23,7 @@ export const postsService = {
                 title: post.title,
                 shortDescription: post.shortDescription,
                 content: post.content,
-                bloggerId: post.bloggerId,
+                blogId: post.blogId,
                 bloggerName: post.bloggerName,
                 createdAt: post.createdAt
             }
@@ -40,7 +40,7 @@ export const postsService = {
                 title: createdPost.title,
                 shortDescription: createdPost.shortDescription,
                 content: createdPost.content,
-                bloggerId: createdPost.bloggerId,
+                blogId: createdPost.blogId,
                 bloggerName: createdPost.bloggerName,
                 createdAt: createdPost.createdAt
             }

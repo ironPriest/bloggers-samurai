@@ -44,10 +44,10 @@ export const postsRepository = {
         title: string,
         shortDescription: string,
         content: string,
-        bloggerId: string): Promise<postDBType | undefined> {
-            let result = await bloggersCollection.find({id: bloggerId}).count()
+        blogId: string): Promise<postDBType | undefined> {
+            let result = await bloggersCollection.find({id: blogId}).count()
             if (result === 1) {
-                const blogger: bloggerDBType | null = await bloggersCollection.findOne({id: bloggerId})
+                const blogger: bloggerDBType | null = await bloggersCollection.findOne({id: blogId})
                 let newPost: postDBType
                 await postsCollection.insertOne( newPost = {
                     _id: new ObjectId(),
@@ -55,7 +55,7 @@ export const postsRepository = {
                     title: title,
                     shortDescription: shortDescription,
                     content: content,
-                    bloggerId: bloggerId,
+                    blogId: blogId,
                     bloggerName: blogger?.name,
                     createdAt: new Date()
                 })

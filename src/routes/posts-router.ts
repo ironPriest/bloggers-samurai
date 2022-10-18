@@ -75,7 +75,7 @@ postsRouter.post('/',
         req.body.title,
         req.body.shortDescription,
         req.body.content,
-        req.body.bloggerId)
+        req.body.blogId)
     if (newPost) {
         res.status(201).send(newPost)
     } else {

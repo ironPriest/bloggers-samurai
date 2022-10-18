@@ -11,7 +11,7 @@ export type postDBType = WithId<{
     title: string
     shortDescription: string
     content: string
-    bloggerId: string
+    blogId: string
     bloggerName: string | undefined
     createdAt: Date
 }>
