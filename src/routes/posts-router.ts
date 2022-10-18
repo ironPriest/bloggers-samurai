@@ -25,10 +25,10 @@ export const contentValidation = body('content')
     .exists({checkFalsy: true})
     .isLength({max: 1000})
 
-export const bloggerIdValidation = body('bloggerId')
+export const blogIdValidation = body('blogId')
     .exists({checkFalsy: true})
-    .custom(async (bloggerId, ) => {
-        const blogger = await bloggersService.getBloggerById(bloggerId)
+    .custom(async (blogId, ) => {
+        const blogger = await bloggersService.getBloggerById(blogId)
         //console.log(blogger, 'blogger')
         if (!blogger) {
             throw new Error('such blogger doesnt exist')
@@ -68,7 +68,7 @@ postsRouter.post('/',
     descValidation,
     titleValidation,
     contentValidation,
-    bloggerIdValidation,
+    blogIdValidation,
     inputValidationMiddleware,
     async(req: Request, res: Response) => {
     const newPost = await postsService.createPost(
@@ -93,7 +93,7 @@ postsRouter.put('/:postId',
     descValidation,
     titleValidation,
     contentValidation,
-    bloggerIdValidation,
+    blogIdValidation,
     inputValidationMiddleware,
     async(req: Request, res: Response) => {
     const isUpdated: number = await postsService.updatePost(
