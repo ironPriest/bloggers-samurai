@@ -13,7 +13,7 @@ export const commentsService = {
             content: content,
             userId: user!.id,
             userLogin: user!.login,
-            addedAt: new Date(),
+            createdAt: new Date(),
             postId: postId
         }
         const createdComment = await commentsRepository.create(comment)
@@ -22,7 +22,7 @@ export const commentsService = {
             content: createdComment.content,
             userId: createdComment.userId,
             userLogin: createdComment.userLogin,
-            addedAt: createdComment.addedAt
+            createdAt: createdComment.createdAt
         }
     },
     async getPostComments(

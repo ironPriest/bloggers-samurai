@@ -33,6 +33,6 @@ export type CommentDBType = WithId<{
     content: string
     userId: string | ObjectId
     userLogin: string
-    addedAt: Date
+    createdAt: Date
     postId: string
 }>
