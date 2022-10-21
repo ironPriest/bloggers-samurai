@@ -80,10 +80,11 @@ authRouter.post('/login',
                 httpOnly: true,
                 secure: true
             })
-            .sendStatus(200)
-            /*.send({
+            .send({
                 'accessToken': token
-            })*/
+            })
+            .sendStatus(200)
+
     } else {
         res.sendStatus(401)
     }
