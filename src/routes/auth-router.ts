@@ -76,7 +76,7 @@ authRouter.post('/login',
         const token = await jwtUtility.createJWT(user)
         const refreshToken = await jwtUtility.createRefreshToken(user)
         res
-            .status(200)
+            .sendStatus(200)
             .send({
                 'accessToken': token
             })
