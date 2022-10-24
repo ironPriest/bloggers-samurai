@@ -7,6 +7,7 @@ import {inputValidationMiddleware} from "../middlewares/input-validation-middlew
 import {body} from "express-validator";
 import {usersService} from "../domain/users-service";
 import {emailConfirmationRepository} from "../repositories/emailconfirmation-repository";
+import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
 
 
 export const authRouter = Router({})
@@ -120,4 +121,17 @@ authRouter.post('/registration-email-resending',
     async(req: Request, res: Response) => {
     await authService.confirmationResend(req.body.email)
     res.sendStatus(204)
+})
+
+authRouter.get('/me',
+    bearerAuthMiddleware,
+    async(req: Request, res: Response) => {
+        if (!req.headers.authorization) {
+            res.send(401)
+            return
+        }
+    const token = req.headers.authorization.split(' ')[1]
+    const userId = await jwtUtility.getUserIdByToken(token)
+    const user = usersService.findById(userId)
+    res.sendStatus(200).send(user)
 })
