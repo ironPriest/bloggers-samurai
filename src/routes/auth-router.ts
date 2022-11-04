@@ -8,6 +8,7 @@ import {body} from "express-validator";
 import {usersService} from "../domain/users-service";
 import {emailConfirmationRepository} from "../repositories/emailconfirmation-repository";
 import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
+import {UserDBType} from "../types/types";
 
 
 export const authRouter = Router({})
@@ -90,6 +91,38 @@ authRouter.post('/login',
         res.sendStatus(401)
     }
 })
+
+authRouter.post('/refresh-token',
+    async(req: Request, res: Response) => {
+
+        if (!req.cookies.refreshToken) {
+            res.sendStatus(401)
+        }
+
+        const userId = await jwtUtility.getUserIdByToken(req.cookies.refreshToken)
+
+        if (!userId) {
+            res.sendStatus(401)
+        }
+
+        const user = await usersService.findById(userId)
+
+        if (user) {
+            const token = await jwtUtility.createJWT(user)
+            const refreshToken = await jwtUtility.createRefreshToken(user)
+            res
+                .cookie('refreshToken', refreshToken, {
+                    httpOnly: true,
+                    secure: true
+                })
+                .send({
+                    'accessToken': token
+                })
+                .sendStatus(200)
+        }
+
+
+    })
 
 authRouter.post(
     '/registration',
