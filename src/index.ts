@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
-import cookieParser from 'express'
+//import cookieParser from 'express'
 import {bloggersRouter} from "./routes/bloggers-router";
 import {postsRouter} from "./routes/posts-router";
 import {usersRouter} from "./routes/users-router";
@@ -17,7 +17,7 @@ const port = process.env.PORT || 5000
 app.use(cors())
 const parserMiddleware = bodyParser.json()
 app.use(parserMiddleware)
-app.use(cookieParser)
+//app.use(cookieParser)
 
 app.use('/blogs', bloggersRouter)
 app.use('/posts', postsRouter)
