@@ -106,18 +106,17 @@ authRouter.post('/refresh-token',
 
         const user = await usersService.findById(userId)
 
-        if (user) {
-            const token = await jwtUtility.createJWT(user)
-            const refreshToken = await jwtUtility.createRefreshToken(user)
-            return res.status(200).cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                secure: true
-            })
-                .send({
-                    'accessToken': token
-                })
+        if (!user) return res.sendStatus(401)
 
-        }
+        const token = await jwtUtility.createJWT(user)
+        const refreshToken = await jwtUtility.createRefreshToken(user)
+        return res.status(200).cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: true
+        })
+            .send({
+                'accessToken': token
+            })
 
 
     })
