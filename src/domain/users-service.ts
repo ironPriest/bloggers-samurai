@@ -3,6 +3,9 @@ import {usersRepository} from "../repositories/users-repository";
 import {authService} from "./auth-service";
 import {v4} from "uuid";
 
+// import {randomUUID} from "crypto";
+// const uuidExample = randomUUID()
+
 export const usersService = {
     async create(
             login: string,

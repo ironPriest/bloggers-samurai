@@ -21,6 +21,7 @@ export const emailConfirmationsCollection = db.collection<EmailConfirmationDBTyp
 
 export async function runDb() {
     try {
+        console.log(mongoUri)
         // Connect the client to the server
         await client.connect();
         console.log("Connected successfully to mongo server");
