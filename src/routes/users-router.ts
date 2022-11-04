@@ -37,10 +37,10 @@ usersRouter.post('/',
         req.body.login,
         req.body.password,
         req.body.email)
-    res.status(201).send(newUser)
+    return res.status(201).send(newUser)
 })
 
-usersRouter.get('/', async (req, res) => {
+usersRouter.get('/', async (req: Request, res: Response) => {
     const pageNumber = req.query.pageNumber? +req.query.pageNumber: 1
     const pageSize = req.query.pageSize? +req.query.pageSize: 10
     const sortBy = req.query.sortBy? req.query.sortBy.toString(): 'createdAt'
@@ -52,14 +52,14 @@ usersRouter.get('/', async (req, res) => {
         pageSize,
         sortBy,
         sortDirection)
-    res.send(users)
+    return res.send(users)
 })
 
-usersRouter.delete('/:id', authMiddleware, async (req, res) => {
+usersRouter.delete('/:id', authMiddleware, async (req: Request, res: Response) => {
     const isDeleted = await usersService.delete(req.params.id)
     if (isDeleted) {
-        res.sendStatus(204)
+        return res.sendStatus(204)
     } else {
-        res.sendStatus(404)
+        return res.sendStatus(404)
     }
 })
