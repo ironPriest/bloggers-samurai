@@ -33,7 +33,7 @@ const emailValidation = body('email')
     .isString()
     .matches('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')
 
-const doubleLoginValidation = body('login').custom(async (login, ) => {
+const doubleLoginValidation = body('login').custom(async (login,) => {
     const user = await usersService.findByLogin(login)
     if (user) {
         throw new Error('login already exists')
@@ -41,7 +41,7 @@ const doubleLoginValidation = body('login').custom(async (login, ) => {
     return true
 })
 
-const doubleEmailValidation = body('email').custom(async (email, ) => {
+const doubleEmailValidation = body('email').custom(async (email,) => {
     const user = await usersService.findByEmail(email)
     if (user) {
         throw new Error('email already exists')
@@ -49,7 +49,7 @@ const doubleEmailValidation = body('email').custom(async (email, ) => {
     return true
 })
 
-const doubleConfirmValidation = body('code').custom(async (code, ) => {
+const doubleConfirmValidation = body('code').custom(async (code,) => {
     const emailConfirmation = await emailConfirmationRepository.findByCode(code)
     if (emailConfirmation) {
         if (emailConfirmation.isConfirmed) {
@@ -59,7 +59,7 @@ const doubleConfirmValidation = body('code').custom(async (code, ) => {
 
 })
 
-const doubleResendingValidation = body('email').custom(async (email, ) => {
+const doubleResendingValidation = body('email').custom(async (email,) => {
     const user = await usersService.findByEmail(email)
     if (user) {
         const emailConfirmation = await emailConfirmationRepository.findByUserId(user?.id)
@@ -72,37 +72,37 @@ const doubleResendingValidation = body('email').custom(async (email, ) => {
 })
 
 authRouter.post('/login',
-    async(req: Request, res: Response) => {
-    const user = await authService.checkCredentials(req.body.login, req.body.password)
-    if (user) {
-        const token = await jwtUtility.createJWT(user)
-        const refreshToken = await jwtUtility.createRefreshToken(user)
-        res
-            .cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                secure: true
-            })
-            .send({
-                'accessToken': token
-            })
-            .sendStatus(200)
+    async (req: Request, res: Response) => {
+        const user = await authService.checkCredentials(req.body.login, req.body.password)
+        if (user) {
+            const token = await jwtUtility.createJWT(user)
+            const refreshToken = await jwtUtility.createRefreshToken(user)
+            return res
+                .cookie('refreshToken', refreshToken, {
+                    httpOnly: true,
+                    secure: true
+                })
+                .send({
+                    'accessToken': token
+                })
+                .sendStatus(200)
 
-    } else {
-        res.sendStatus(401)
-    }
-})
+        } else {
+            return res.sendStatus(401)
+        }
+    })
 
 authRouter.post('/refresh-token',
-    async(req: Request, res: Response) => {
+    async (req: Request, res: Response) => {
 
         if (!req.cookies.refreshToken) {
-            res.sendStatus(401)
+            return res.sendStatus(401)
         }
 
         const userId = await jwtUtility.getUserIdByToken(req.cookies.refreshToken)
 
         if (!userId) {
-            res.sendStatus(401)
+            return res.sendStatus(401)
         }
 
         const user = await usersService.findById(userId)
@@ -110,7 +110,7 @@ authRouter.post('/refresh-token',
         if (user) {
             const token = await jwtUtility.createJWT(user)
             const refreshToken = await jwtUtility.createRefreshToken(user)
-            res
+            return res
                 .cookie('refreshToken', refreshToken, {
                     httpOnly: true,
                     secure: true
@@ -132,39 +132,39 @@ authRouter.post(
     doubleLoginValidation,
     doubleEmailValidation,
     inputValidationMiddleware,
-    async(req: Request, res: Response) => {
-    await authService.createUser(
-        req.body.login,
-        req.body.password,
-        req.body.email)
-    res.sendStatus(204)
-})
+    async (req: Request, res: Response) => {
+        await authService.createUser(
+            req.body.login,
+            req.body.password,
+            req.body.email)
+        return res.sendStatus(204)
+    })
 
 authRouter.post('/registration-confirmation',
     doubleConfirmValidation,
     inputValidationMiddleware,
-    async(req: Request, res: Response) =>{
-    await authService.confirm(req.body.code)
-    res.sendStatus(204)
-})
+    async (req: Request, res: Response) => {
+        await authService.confirm(req.body.code)
+        return res.sendStatus(204)
+    })
 
 authRouter.post('/registration-email-resending',
     doubleResendingValidation,
     inputValidationMiddleware,
-    async(req: Request, res: Response) => {
-    await authService.confirmationResend(req.body.email)
-    res.sendStatus(204)
-})
+    async (req: Request, res: Response) => {
+        await authService.confirmationResend(req.body.email)
+        return res.sendStatus(204)
+    })
 
 authRouter.get('/me',
     bearerAuthMiddleware,
-    async(req: Request, res: Response) => {
+    async (req: Request, res: Response) => {
         if (!req.headers.authorization) {
             res.send(401)
             return
         }
-    const token = req.headers.authorization.split(' ')[1]
-    const userId = await jwtUtility.getUserIdByToken(token)
-    const user = usersService.findById(userId)
-    res.sendStatus(200).send(user)
-})
+        const token = req.headers.authorization.split(' ')[1]
+        const userId = await jwtUtility.getUserIdByToken(token)
+        const user = usersService.findById(userId)
+        return res.sendStatus(200).send(user)
+    })
