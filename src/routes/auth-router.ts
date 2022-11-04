@@ -54,7 +54,7 @@ const doubleConfirmValidation = body('code').custom(async (code,) => {
     if (emailConfirmation) {
         if (emailConfirmation.isConfirmed) {
             throw new Error('already confirmed')
-        } else return
+        } else return true
     } else throw new Error('no such user')
 
 })
@@ -65,7 +65,7 @@ const doubleResendingValidation = body('email').custom(async (email,) => {
         const emailConfirmation = await emailConfirmationRepository.findByUserId(user?.id)
         if (emailConfirmation!.isConfirmed) {
             throw new Error('already confirmed')
-        } else return
+        } else return true
     } else {
         throw new Error('no such email')
     }
@@ -77,15 +77,14 @@ authRouter.post('/login',
         if (user) {
             const token = await jwtUtility.createJWT(user)
             const refreshToken = await jwtUtility.createRefreshToken(user)
-            return res
-                .cookie('refreshToken', refreshToken, {
+            return res.status(200).cookie('refreshToken', refreshToken, {
                     httpOnly: true,
                     secure: true
                 })
                 .send({
                     'accessToken': token
                 })
-                .sendStatus(200)
+
 
         } else {
             return res.sendStatus(401)
@@ -110,15 +109,14 @@ authRouter.post('/refresh-token',
         if (user) {
             const token = await jwtUtility.createJWT(user)
             const refreshToken = await jwtUtility.createRefreshToken(user)
-            return res
-                .cookie('refreshToken', refreshToken, {
+            return res.status(200).cookie('refreshToken', refreshToken, {
                     httpOnly: true,
                     secure: true
                 })
                 .send({
                     'accessToken': token
                 })
-                .sendStatus(200)
+
         }
 
 
@@ -160,11 +158,10 @@ authRouter.get('/me',
     bearerAuthMiddleware,
     async (req: Request, res: Response) => {
         if (!req.headers.authorization) {
-            res.send(401)
-            return
+            return res.sendStatus(401)
         }
         const token = req.headers.authorization.split(' ')[1]
         const userId = await jwtUtility.getUserIdByToken(token)
         const user = usersService.findById(userId)
-        return res.sendStatus(200).send(user)
+        return res.status(200).send(user)
     })
