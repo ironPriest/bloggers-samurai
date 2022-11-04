@@ -78,9 +78,9 @@ authRouter.post('/login',
             const token = await jwtUtility.createJWT(user)
             const refreshToken = await jwtUtility.createRefreshToken(user)
             return res.status(200).cookie('refreshToken', refreshToken, {
-                    httpOnly: true,
-                    secure: true
-                })
+                httpOnly: true,
+                secure: true
+            })
                 .send({
                     'accessToken': token
                 })
@@ -110,9 +110,9 @@ authRouter.post('/refresh-token',
             const token = await jwtUtility.createJWT(user)
             const refreshToken = await jwtUtility.createRefreshToken(user)
             return res.status(200).cookie('refreshToken', refreshToken, {
-                    httpOnly: true,
-                    secure: true
-                })
+                httpOnly: true,
+                secure: true
+            })
                 .send({
                     'accessToken': token
                 })
@@ -154,14 +154,34 @@ authRouter.post('/registration-email-resending',
         return res.sendStatus(204)
     })
 
+authRouter.post('/logout',
+    async (req: Request, res: Response) => {
+        const refreshToken = req.cookies.refreshToken
+        if (!refreshToken) {
+            return res.sendStatus(401)
+        }
+        const userId = await jwtUtility.getUserIdByToken(refreshToken)
+        if (!userId) return res.sendStatus(401)
+        const user = await usersService.findById(userId)
+        if (!user) return res.sendStatus(401)
+        return res.status(204).cookie('refreshToken', '', {
+            httpOnly: true,
+            secure: true
+        }).send({})
+    })
+
 authRouter.get('/me',
     bearerAuthMiddleware,
     async (req: Request, res: Response) => {
         if (!req.headers.authorization) {
             return res.sendStatus(401)
         }
+        const authType = req.headers.authorization.split(' ')[0]
+        if (authType !== 'Bearer') return res.sendStatus(401)
         const token = req.headers.authorization.split(' ')[1]
         const userId = await jwtUtility.getUserIdByToken(token)
-        const user = usersService.findById(userId)
+        if (!userId) return res.sendStatus(401)
+        const user = await usersService.findById(userId)
+        if (!user) return res.sendStatus(401)
         return res.status(200).send(user)
     })
