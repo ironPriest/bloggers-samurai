@@ -98,6 +98,12 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
             return res.sendStatus(401)
         }
 
+        const reqRefreshToken = req.cookies.refreshToken
+        // token check
+        const blackToken: TokenDBType | null = await blacktockensRepository.check(reqRefreshToken)
+        //console.log('blackToken ----->', blackToken)
+        if (blackToken) return res.sendStatus(401)
+
         const userId = await jwtUtility.getUserIdByToken(req.cookies.refreshToken)
         if (!userId) {
             return res.sendStatus(401)
