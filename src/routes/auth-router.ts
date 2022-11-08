@@ -9,6 +9,7 @@ import {usersService} from "../domain/users-service";
 import {emailConfirmationRepository} from "../repositories/emailconfirmation-repository";
 import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
 import {UserDBType} from "../types/types";
+import {blacktockensRepository} from "../repositories/blacktockens-repository";
 
 
 export const authRouter = Router({})
@@ -91,21 +92,18 @@ authRouter.post('/login',
         }
     })
 
-authRouter.post('/refresh-token',
-    async (req: Request, res: Response) => {
+authRouter.post('/refresh-token', async (req: Request, res: Response) => {
 
         if (!req.cookies.refreshToken) {
             return res.sendStatus(401)
         }
 
         const userId = await jwtUtility.getUserIdByToken(req.cookies.refreshToken)
-
         if (!userId) {
             return res.sendStatus(401)
         }
 
         const user = await usersService.findById(userId)
-
         if (!user) return res.sendStatus(401)
 
         const token = await jwtUtility.createJWT(user)
@@ -113,8 +111,7 @@ authRouter.post('/refresh-token',
         return res.status(200).cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true
-        })
-            .send({
+        }).send({
                 'accessToken': token
             })
 
@@ -159,10 +156,14 @@ authRouter.post('/logout',
         if (!refreshToken) {
             return res.sendStatus(401)
         }
+        // token check
+        const blackToken = await blacktockensRepository.check(refreshToken)
+        if (blackToken) return res.sendStatus(401)
         const userId = await jwtUtility.getUserIdByToken(refreshToken)
         if (!userId) return res.sendStatus(401)
         const user = await usersService.findById(userId)
         if (!user) return res.sendStatus(401)
+        await blacktockensRepository.addToList(refreshToken)
         return res.status(204).cookie('refreshToken', '', {
             httpOnly: true,
             secure: true

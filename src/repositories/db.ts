@@ -4,7 +4,8 @@ import {
     postDBType,
     UserDBType,
     CommentDBType,
-    EmailConfirmationDBType
+    EmailConfirmationDBType,
+    TokenDBType
 } from '../types/types'
 
 const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017"
@@ -18,6 +19,7 @@ export const postsCollection = db.collection<postDBType>('posts')
 export const usersCollection = db.collection<UserDBType>('users')
 export const commentsCollection = db.collection<CommentDBType>('comments')
 export const emailConfirmationsCollection = db.collection<EmailConfirmationDBType>('confirmations')
+export const blacktockensCollection = db.collection<TokenDBType>('tokenBlackList')
 
 export async function runDb() {
     try {

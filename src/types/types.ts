@@ -36,3 +36,6 @@ export type CommentDBType = WithId<{
     createdAt: Date
     postId: string
 }>
+export type TokenDBType = WithId<{
+    token: string
+}>
