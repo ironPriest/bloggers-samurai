@@ -158,7 +158,7 @@ authRouter.post('/logout',
         }
         // token check
         const blackToken: TokenDBType | null = await blacktockensRepository.check(refreshToken)
-        console.log('blackToken ----->', blackToken)
+        //console.log('blackToken ----->', blackToken)
         if (blackToken) return res.sendStatus(401)
         const userId = await jwtUtility.getUserIdByToken(refreshToken)
         if (!userId) return res.sendStatus(401)
