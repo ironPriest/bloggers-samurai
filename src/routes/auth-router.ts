@@ -190,5 +190,9 @@ authRouter.get('/me',
         if (!userId) return res.sendStatus(401)
         const user = await usersService.findById(userId)
         if (!user) return res.sendStatus(401)
-        return res.status(200).send(user)
+        return res.status(200).send({
+            email: user.email,
+            login: user.login,
+            userId: user.id
+        })
     })
