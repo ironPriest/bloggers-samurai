@@ -7,6 +7,11 @@ export const blacktockensRepository = {
         await blacktockensCollection.insertOne(token)
     },
     async check(token: TokenDBType): Promise<TokenDBType | null> {
-        return await blacktockensCollection.findOne(token)
+        let res = await blacktockensCollection.findOne(token)
+        if (res) {
+            return res
+        } else {
+            return null
+        }
     }
 }
