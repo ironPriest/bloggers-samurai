@@ -8,7 +8,7 @@ import {body} from "express-validator";
 import {usersService} from "../domain/users-service";
 import {emailConfirmationRepository} from "../repositories/emailconfirmation-repository";
 import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
-import {UserDBType} from "../types/types";
+import {TokenDBType, UserDBType} from "../types/types";
 import {blacktockensRepository} from "../repositories/blacktockens-repository";
 
 
@@ -157,7 +157,7 @@ authRouter.post('/logout',
             return res.sendStatus(401)
         }
         // token check
-        const blackToken = await blacktockensRepository.check(refreshToken)
+        const blackToken: TokenDBType | null = await blacktockensRepository.check(refreshToken)
         if (blackToken) return res.sendStatus(401)
         const userId = await jwtUtility.getUserIdByToken(refreshToken)
         if (!userId) return res.sendStatus(401)
