@@ -2,6 +2,7 @@ import {UserDBType} from "../types/types";
 import jwt from 'jsonwebtoken'
 import {settings} from "../types/settings";
 import {ObjectId} from "mongodb";
+import {blacktockensRepository} from "../repositories/blacktockens-repository";
 
 export const jwtUtility = {
     async createJWT(user: UserDBType) {
@@ -17,5 +18,12 @@ export const jwtUtility = {
         } catch (error) {
             return null
         }
+    },
+    async addToBlackList(corruptedToken: string) {
+        let token = {
+            _id: new ObjectId(),
+            token: corruptedToken
+        }
+        await blacktockensRepository.addToList(token)
     }
 }

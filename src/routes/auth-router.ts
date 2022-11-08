@@ -111,7 +111,7 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
 
         const user = await usersService.findById(userId)
         if (!user) return res.sendStatus(401)
-    await blacktockensRepository.addToList(reqRefreshToken)
+        await jwtUtility.addToBlackList(reqRefreshToken)
         const token = await jwtUtility.createJWT(user)
         const refreshToken = await jwtUtility.createRefreshToken(user)
         return res.status(200).cookie('refreshToken', refreshToken, {
@@ -170,7 +170,7 @@ authRouter.post('/logout',
         if (!userId) return res.sendStatus(401)
         const user = await usersService.findById(userId)
         if (!user) return res.sendStatus(401)
-        await blacktockensRepository.addToList(refreshToken)
+        await jwtUtility.addToBlackList(refreshToken)
         return res.status(204).cookie('refreshToken', '', {
             httpOnly: true,
             secure: true
