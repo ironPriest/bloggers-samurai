@@ -1,4 +1,5 @@
 import express from 'express'
+import {Request, Response} from "express";
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import {bloggersRouter} from "./routes/bloggers-router";
@@ -18,6 +19,9 @@ const parserMiddleware = express.json()
 app.use(parserMiddleware)
 app.use(cookieParser())
 
+app.get('/', (req: Request, res: Response) => {
+    res.send('Hail to Belarus!!! Hail to Ukraine!!!')
+})
 app.use('/blogs', bloggersRouter)
 app.use('/posts', postsRouter)
 app.use('/users', usersRouter)
