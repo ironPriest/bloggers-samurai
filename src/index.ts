@@ -8,8 +8,10 @@ import {usersRouter} from "./routes/users-router";
 import {authRouter} from "./routes/auth-router";
 import {commentsRouter} from "./routes/comments-router";
 import {testingRouter} from "./routes/testing-router";
+import {securityDevicesRouter} from "./routes/security-devices";
 
 import {runDb} from "./repositories/db";
+
 
 
 const app = express()
@@ -28,6 +30,9 @@ app.use('/users', usersRouter)
 app.use('/auth', authRouter)
 app.use('/comments', commentsRouter)
 app.use('/testing', testingRouter)
+app.use('/security/devices', securityDevicesRouter)
+
+app.set('trust proxy', true)
 
 const startApp = async () => {
     await runDb()

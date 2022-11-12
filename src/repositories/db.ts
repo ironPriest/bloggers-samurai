@@ -5,7 +5,7 @@ import {
     UserDBType,
     CommentDBType,
     EmailConfirmationDBType,
-    TokenDBType
+    TokenDBType, DeviceAuthSessionType
 } from '../types/types'
 
 const mongoUri = process.env.mongoURI || "mongodb://0.0.0.0:27017"
@@ -20,6 +20,7 @@ export const usersCollection = db.collection<UserDBType>('users')
 export const commentsCollection = db.collection<CommentDBType>('comments')
 export const emailConfirmationsCollection = db.collection<EmailConfirmationDBType>('confirmations')
 export const blacktockensCollection = db.collection<TokenDBType>('tokenBlackList')
+export const deviceAuthSessionsCollection = db.collection<DeviceAuthSessionType>('deviceAuthSessions')
 
 export async function runDb() {
     try {

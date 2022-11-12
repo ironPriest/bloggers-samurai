@@ -4,12 +4,13 @@ import {jwtUtility} from "../application/jwt-utility";
 import {emailAdapter} from "../adapters/email-adapter";
 import {emailService} from "../domain/email-service";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
-import {body} from "express-validator";
+import {body, header} from "express-validator";
 import {usersService} from "../domain/users-service";
 import {emailConfirmationRepository} from "../repositories/emailconfirmation-repository";
 import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
-import {TokenDBType, UserDBType} from "../types/types";
+import {DeviceAuthSessionType, TokenDBType, UserDBType} from "../types/types";
 import {blacktockensRepository} from "../repositories/blacktockens-repository";
+import {deviceAuthSessionsService} from "../domain/device-auth-sessions-service";
 
 
 export const authRouter = Router({})
@@ -75,22 +76,24 @@ const doubleResendingValidation = body('email').custom(async (email,) => {
 authRouter.post('/login',
     async (req: Request, res: Response) => {
         const user = await authService.checkCredentials(req.body.login, req.body.password)
-        if (user) {
-            const token = await jwtUtility.createJWT(user)
-            const refreshToken = await jwtUtility.createRefreshToken(user)
-            return res.status(200).cookie('refreshToken', refreshToken, {
-                httpOnly: true,
-                secure: true
-            })
-                .send({
-                    'accessToken': token
-                })
-
-
-        } else {
+        if (!user) {
             return res.sendStatus(401)
         }
-    })
+        const ip = req.ip
+        const title = req.headers["user-agent"]!
+        const userId = user.id
+        const deviceAuthSession: DeviceAuthSessionType =  await deviceAuthSessionsService.create(ip, title, userId)
+        const deviceId = deviceAuthSession.deviceId
+        const token = await jwtUtility.createJWT(user)
+        const refreshToken = await jwtUtility.createRefreshToken(user, deviceId)
+        return res.status(200).cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: true
+        })
+            .send({
+                'accessToken': token
+            })
+})
 
 authRouter.post('/refresh-token', async (req: Request, res: Response) => {
 
@@ -113,7 +116,8 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
         if (!user) return res.sendStatus(401)
         await jwtUtility.addToBlackList(reqRefreshToken)
         const token = await jwtUtility.createJWT(user)
-        const refreshToken = await jwtUtility.createRefreshToken(user)
+        const deviceAuthSession: DeviceAuthSessionType | null = await deviceAuthSessionsService.getSessionByUserId(user.id)
+        const refreshToken = await jwtUtility.createRefreshToken(user, deviceAuthSession!.deviceId)
         return res.status(200).cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true

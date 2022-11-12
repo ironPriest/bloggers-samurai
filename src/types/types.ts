@@ -39,3 +39,11 @@ export type CommentDBType = WithId<{
 export type TokenDBType = WithId<{
     token: string
 }>
+export type DeviceAuthSessionType = WithId<{
+    lastActiveDate: Date
+    deviceId: string
+    ip: string
+    title: string
+    userId: string
+    rtExpDate: Date
+}>
