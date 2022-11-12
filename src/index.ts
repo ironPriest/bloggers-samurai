@@ -22,7 +22,7 @@ app.use(parserMiddleware)
 app.use(cookieParser())
 
 app.get('/', (req: Request, res: Response) => {
-    res.send('Hail to Belarus!!! Hail to Ukraine!!!')
+    res.send(':0')
 })
 app.use('/blogs', bloggersRouter)
 app.use('/posts', postsRouter)
