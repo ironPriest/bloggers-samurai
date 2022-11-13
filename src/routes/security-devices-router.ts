@@ -6,6 +6,14 @@ import {deviceAuthSessionsRepository} from "../repositories/device-auth-sessions
 export const securityDevicesRouter = Router({})
 
 securityDevicesRouter.get('/', async (req: Request, res: Response) => {
+    if (!req.cookies.refreshToken) {
+        return res.sendStatus(401)
+    }
+    const token = req.cookies.refreshToken
+    const deviceId = await jwtUtility.getDeviceIdByToken(token)
+    if(!deviceId) {
+        return res.sendStatus(401)
+    }
     const sessions = await deviceAuthSessionsService.getSessions()
     return res.status(200).send(sessions)
 })
