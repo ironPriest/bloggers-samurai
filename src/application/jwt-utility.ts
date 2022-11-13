@@ -19,6 +19,14 @@ export const jwtUtility = {
             return null
         }
     },
+    async getDeviceIdByToken(token: string) {
+        try {
+            const result: any = await jwt.verify(token, settings.JWT_SECRET)
+            return result.deviceId
+        } catch (error) {
+            return null
+        }
+    },
     async addToBlackList(corruptedToken: string) {
         let token = {
             _id: new ObjectId(),

@@ -15,5 +15,11 @@ export const deviceAuthSessionsRepository = {
     },
     async deleteAll() {
         await deviceAuthSessionsCollection.deleteMany({})
+    },
+    async deleteExcept(deviceId: string) {
+        await deviceAuthSessionsCollection.deleteMany({deviceId: {$ne: deviceId}})
+    },
+    async deleteByDeviceId(deviceId: string) {
+        await deviceAuthSessionsCollection.deleteOne({deviceId:deviceId})
     }
 }

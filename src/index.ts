@@ -8,7 +8,7 @@ import {usersRouter} from "./routes/users-router";
 import {authRouter} from "./routes/auth-router";
 import {commentsRouter} from "./routes/comments-router";
 import {testingRouter} from "./routes/testing-router";
-import {securityDevicesRouter} from "./routes/security-devices";
+import {securityDevicesRouter} from "./routes/security-devices-router";
 
 import {runDb} from "./repositories/db";
 
