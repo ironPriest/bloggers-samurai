@@ -12,5 +12,8 @@ export const deviceAuthSessionsRepository = {
         const sessions =  await deviceAuthSessionsCollection.find({}, {projection: {_id: 0, userId: 0, rtExpDate: 0}}).toArray()
         console.log(sessions)
         return sessions
+    },
+    async deleteAll() {
+        await deviceAuthSessionsCollection.deleteMany({})
     }
 }
