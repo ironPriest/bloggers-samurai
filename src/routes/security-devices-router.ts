@@ -1,6 +1,7 @@
 import {Request, Response, Router} from "express";
 import {deviceAuthSessionsService} from "../domain/device-auth-sessions-service";
 import {jwtUtility} from "../application/jwt-utility";
+import {deviceAuthSessionsRepository} from "../repositories/device-auth-sessions-repository";
 
 export const securityDevicesRouter = Router({})
 
@@ -21,6 +22,10 @@ securityDevicesRouter.delete('/', async (req: Request, res: Response) => {
     return res.sendStatus(204)
 })
 securityDevicesRouter.delete('/:deviceId', async (req: Request, res: Response) => {
+    const session = await deviceAuthSessionsRepository.getSessionsByDeviceId(req.params.deviceId)
+    if (!session) {
+        return res.sendStatus(404)
+    }
     if (!req.cookies.refreshToken) {
         return res.sendStatus(401)
     }

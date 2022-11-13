@@ -8,6 +8,9 @@ export const deviceAuthSessionsRepository = {
     async getSessionByUserId(userId: string): Promise<DeviceAuthSessionType | null> {
         return await deviceAuthSessionsCollection.findOne({userId: userId})
     },
+    async getSessionsByDeviceId(deviceId: string): Promise<DeviceAuthSessionType | null> {
+        return await deviceAuthSessionsCollection.findOne({deviceId: deviceId})
+    },
     async getSessions() {
         const sessions =  await deviceAuthSessionsCollection.find({}, {projection: {_id: 0, userId: 0, rtExpDate: 0}}).toArray()
         console.log(sessions)
