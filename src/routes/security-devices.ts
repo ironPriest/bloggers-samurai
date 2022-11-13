@@ -5,5 +5,5 @@ export const securityDevicesRouter = Router({})
 
 securityDevicesRouter.get('/', async (req: Request, res: Response) => {
     const sessions = await deviceAuthSessionsService.getSessions()
-    return res.send(sessions).send(200)
+    return res.status(200).send(sessions)
 })
