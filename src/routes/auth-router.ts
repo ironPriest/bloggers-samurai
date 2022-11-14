@@ -104,7 +104,6 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
         const reqRefreshToken = req.cookies.refreshToken
         // token check
         const blackToken: TokenDBType | null = await blacktockensRepository.check(reqRefreshToken)
-        //console.log('blackToken ----->', blackToken)
         if (blackToken) return res.sendStatus(401)
 
         const userId = await jwtUtility.getUserIdByToken(req.cookies.refreshToken)
@@ -118,6 +117,7 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
         const token = await jwtUtility.createJWT(user)
         const deviceAuthSession: DeviceAuthSessionType | null = await deviceAuthSessionsService.getSessionByUserId(user.id)
         const refreshToken = await jwtUtility.createRefreshToken(user, deviceAuthSession!.deviceId)
+        await deviceAuthSessionsService.update(deviceAuthSession!.deviceId)
         return res.status(200).cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true

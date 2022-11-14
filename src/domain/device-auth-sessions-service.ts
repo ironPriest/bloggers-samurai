@@ -18,6 +18,10 @@ export const deviceAuthSessionsService = {
         await deviceAuthSessionsRepository.create(deviceAuthSession)
         return deviceAuthSession
     },
+    async update(deviceId: string) {
+        const newLastActiveDate = new Date()
+        await deviceAuthSessionsRepository.update(deviceId, newLastActiveDate)
+    },
     async getSessionByUserId(userId: string): Promise<DeviceAuthSessionType | null> {
         return await deviceAuthSessionsRepository.getSessionByUserId(userId)
     },

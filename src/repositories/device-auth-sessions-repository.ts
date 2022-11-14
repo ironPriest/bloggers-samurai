@@ -5,6 +5,9 @@ export const deviceAuthSessionsRepository = {
     async create(deviceAuthSession: DeviceAuthSessionType) {
         await  deviceAuthSessionsCollection.insertOne(deviceAuthSession)
     },
+    async update(deviceId: string, newLastActiveDate: Date) {
+        await  deviceAuthSessionsCollection.updateOne({deviceId: deviceId}, {$set: {lastActiveDate: newLastActiveDate}})
+    },
     async getSessionByUserId(userId: string): Promise<DeviceAuthSessionType | null> {
         return await deviceAuthSessionsCollection.findOne({userId: userId})
     },
