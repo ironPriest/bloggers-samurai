@@ -7,11 +7,14 @@ export const securityDevicesRouter = Router({})
 
 securityDevicesRouter.get('/', async (req: Request, res: Response) => {
     if (!req.cookies.refreshToken) {
+        console.log('no cookies')
         return res.sendStatus(401)
     }
     const token = req.cookies.refreshToken
+    console.log('rt --->', token)
     const deviceId = await jwtUtility.getDeviceIdByToken(token)
     if(!deviceId) {
+        console.log('can not get deviceId from rt')
         return res.sendStatus(401)
     }
     const sessions = await deviceAuthSessionsService.getSessions()
