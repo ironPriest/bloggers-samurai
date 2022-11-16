@@ -45,9 +45,9 @@ securityDevicesRouter.delete('/:deviceId', async (req: Request, res: Response) =
     if(!RTDeviceId) {
         return res.sendStatus(404)
     }
-    // if (RTDeviceId !== req.params.deviceId) {
-    //     return res.sendStatus(403)
-    // }
+    if (RTDeviceId !== req.params.deviceId) {
+        return res.sendStatus(403)
+    }
     await deviceAuthSessionsService.deleteByDeviceId(req.params.deviceId)
     return res.sendStatus(204)
 })
