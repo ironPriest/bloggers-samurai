@@ -1,5 +1,6 @@
 import {DeviceAuthSessionType} from "../types/types";
 import {deviceAuthSessionsCollection} from "./db";
+import {ObjectId} from "mongodb";
 
 export const deviceAuthSessionsRepository = {
     async create(deviceAuthSession: DeviceAuthSessionType) {
@@ -8,7 +9,7 @@ export const deviceAuthSessionsRepository = {
     async update(deviceId: string, newLastActiveDate: Date) {
         await  deviceAuthSessionsCollection.updateOne({deviceId: deviceId}, {$set: {lastActiveDate: newLastActiveDate}})
     },
-    async getSessionByUserId(userId: string): Promise<DeviceAuthSessionType | null> {
+    async getSessionByUserId(userId: ObjectId): Promise<DeviceAuthSessionType | null> {
         return await deviceAuthSessionsCollection.findOne({userId: userId})
     },
     async getSessionsByDeviceId(deviceId: string): Promise<DeviceAuthSessionType | null> {
@@ -26,6 +27,6 @@ export const deviceAuthSessionsRepository = {
         await deviceAuthSessionsCollection.deleteMany({deviceId: {$ne: deviceId}})
     },
     async deleteByDeviceId(deviceId: string) {
-        await deviceAuthSessionsCollection.deleteOne({deviceId:deviceId})
+        await deviceAuthSessionsCollection.deleteOne({deviceId: deviceId})
     }
 }

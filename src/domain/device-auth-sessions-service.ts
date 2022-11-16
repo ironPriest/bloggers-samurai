@@ -5,7 +5,7 @@ import add from "date-fns/add";
 import {deviceAuthSessionsRepository} from "../repositories/device-auth-sessions-repository";
 
 export const deviceAuthSessionsService = {
-    async create(ip: string, title: string, userId: string) {
+    async create(ip: string, title: string, userId: ObjectId) {
         const deviceAuthSession: DeviceAuthSessionType = {
             _id: new ObjectId(),
             lastActiveDate: new Date(),
@@ -22,7 +22,7 @@ export const deviceAuthSessionsService = {
         const newLastActiveDate = new Date()
         await deviceAuthSessionsRepository.update(deviceId, newLastActiveDate)
     },
-    async getSessionByUserId(userId: string): Promise<DeviceAuthSessionType | null> {
+    async getSessionByUserId(userId: ObjectId): Promise<DeviceAuthSessionType | null> {
         return await deviceAuthSessionsRepository.getSessionByUserId(userId)
     },
     async getSessions() {

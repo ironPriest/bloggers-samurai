@@ -44,6 +44,6 @@ export type DeviceAuthSessionType = WithId<{
     deviceId: string
     ip: string
     title: string
-    userId: string
+    userId: ObjectId
     rtExpDate: Date
 }>

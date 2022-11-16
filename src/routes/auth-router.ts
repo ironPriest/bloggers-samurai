@@ -81,7 +81,7 @@ authRouter.post('/login',
         }
         const ip = req.ip
         const title = req.headers["user-agent"]!
-        const userId = user.id
+        const userId = user._id
         const deviceAuthSession: DeviceAuthSessionType =  await deviceAuthSessionsService.create(ip, title, userId)
         const deviceId = deviceAuthSession.deviceId
         const token = await jwtUtility.createJWT(user)
@@ -121,7 +121,7 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
         }
         await jwtUtility.addToBlackList(reqRefreshToken)
         const token = await jwtUtility.createJWT(user)
-        const deviceAuthSession: DeviceAuthSessionType | null = await deviceAuthSessionsService.getSessionByUserId(user.id)
+        const deviceAuthSession: DeviceAuthSessionType | null = await deviceAuthSessionsService.getSessionByUserId(user._id)
         const refreshToken = await jwtUtility.createRefreshToken(user, deviceAuthSession!.deviceId)
         await deviceAuthSessionsService.update(deviceAuthSession!.deviceId)
         return res.status(200).cookie('refreshToken', refreshToken, {
@@ -180,6 +180,8 @@ authRouter.post('/logout',
         if (!userId) return res.sendStatus(401)
         const user = await usersService.findById(userId)
         if (!user) return res.sendStatus(401)
+        const session = await deviceAuthSessionsService.getSessionByUserId(userId)
+        await deviceAuthSessionsService.deleteByDeviceId(session!.deviceId)
         await jwtUtility.addToBlackList(refreshToken)
         return res.status(204).cookie('refreshToken', '', {
             httpOnly: true,
