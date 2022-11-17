@@ -48,6 +48,7 @@ securityDevicesRouter.delete('/:deviceId', async (req: Request, res: Response) =
     }
     const userId = await jwtUtility.getUserIdByToken(token)
     const checkRes = await deviceAuthSessionsRepository.check(userId!, req.params.deviceId)
+    console.log('check res --->', checkRes)
     // whether it's an appropriate implementation
     if (!checkRes) {
         return res.sendStatus(403)
