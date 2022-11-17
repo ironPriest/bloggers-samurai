@@ -45,9 +45,11 @@ securityDevicesRouter.delete('/:deviceId', async (req: Request, res: Response) =
     if(!RTDeviceId) {
         return res.sendStatus(404)
     }
-    if (RTDeviceId !== req.params.deviceId) {
-        return res.sendStatus(403)
-    }
+    const userId = await jwtUtility.getUserIdByToken(token)
+    const checkRes = await deviceAuthSessionsRepository.check(userId!, req.params.deviceId)
+    // if (RTDeviceId !== req.params.deviceId) {
+    //     return res.sendStatus(403)
+    // }
     await deviceAuthSessionsService.deleteByDeviceId(req.params.deviceId)
     return res.sendStatus(204)
 })

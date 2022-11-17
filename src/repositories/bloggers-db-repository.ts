@@ -34,7 +34,7 @@ export const bloggersRepository = {
                 .toArray()
         }
     },
-    async getBloggerById(bloggerId: string): Promise<bloggerDBType | null | void> {
+    async getBloggerById(bloggerId: string): Promise<bloggerDBType | null> {
         return await bloggersCollection.findOne({id: bloggerId})
     },
     async createBlogger(newBlogger: bloggerDBType): Promise<bloggerDBType> {
