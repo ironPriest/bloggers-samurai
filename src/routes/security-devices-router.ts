@@ -34,7 +34,8 @@ securityDevicesRouter.delete('/', async (req: Request, res: Response) => {
 })
 securityDevicesRouter.delete('/:deviceId', async (req: Request, res: Response) => {
     const session = await deviceAuthSessionsRepository.getSessionsByDeviceId(req.params.deviceId)
-    if (!session) {
+    const deviceId = session?.deviceId
+    if (!deviceId) {
         return res.sendStatus(404)
     }
     if (!req.cookies.refreshToken) {
