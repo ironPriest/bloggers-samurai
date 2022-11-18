@@ -27,7 +27,7 @@ export const deviceAuthSessionsRepository = {
         await deviceAuthSessionsCollection.deleteMany({})
     },
     async deleteExcept(userId: ObjectId, deviceId: string) {
-        await deviceAuthSessionsCollection.deleteMany({$and: [{userId: userId}, {deviceId: {$ne: deviceId}}]})
+        await deviceAuthSessionsCollection.deleteMany({userId: userId, deviceId: {$ne: deviceId}})
     },
     async deleteByDeviceId(deviceId: string) {
         await deviceAuthSessionsCollection.deleteOne({deviceId: deviceId})
