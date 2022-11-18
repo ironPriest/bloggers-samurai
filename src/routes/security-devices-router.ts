@@ -38,22 +38,20 @@ securityDevicesRouter.delete('/', async (req: Request, res: Response) => {
 })
 securityDevicesRouter.delete('/:deviceId', async (req: Request, res: Response) => {
     const session = await deviceAuthSessionsRepository.getSessionsByDeviceId(req.params.deviceId)
-    const deviceId = session?.deviceId
-    if (!deviceId) {
+    if (!session) {
         return res.sendStatus(404)
     }
     if (!req.cookies.refreshToken) {
         return res.sendStatus(401)
     }
     const token = req.cookies.refreshToken
-    const RTDeviceId = await jwtUtility.getDeviceIdByToken(token)
-    if(!RTDeviceId) {
-        return res.sendStatus(404)
-    }
+    // const RTDeviceId = await jwtUtility.getDeviceIdByToken(token)
+    // if(!RTDeviceId) {
+    //     return res.sendStatus(404)
+    // }
     const userId = await jwtUtility.getUserIdByToken(token)
-    const checkRes = await deviceAuthSessionsRepository.check(userId!, req.params.deviceId)
-    const varToCheck = checkRes?.lastActiveDate
-    if (!varToCheck) {
+    const result = await deviceAuthSessionsRepository.check(userId!, req.params.deviceId)
+    if (!result) {
         return res.sendStatus(403)
     }
     // if (RTDeviceId !== req.params.deviceId) {
