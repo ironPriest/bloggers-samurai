@@ -25,11 +25,15 @@ securityDevicesRouter.delete('/', async (req: Request, res: Response) => {
         return res.sendStatus(401)
     }
     const token = req.cookies.refreshToken
+    const userId = await jwtUtility.getUserIdByToken(token)
+    if(!userId) {
+        return res.sendStatus(404)
+    }
     const deviceId = await jwtUtility.getDeviceIdByToken(token)
     if(!deviceId) {
         return res.sendStatus(404)
     }
-    await deviceAuthSessionsService.deleteExcept(deviceId)
+    await deviceAuthSessionsService.deleteExcept(userId, deviceId)
     return res.sendStatus(204)
 })
 securityDevicesRouter.delete('/:deviceId', async (req: Request, res: Response) => {
