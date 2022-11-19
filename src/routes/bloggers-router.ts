@@ -24,7 +24,7 @@ const nameValidation = body('name')
     .exists({checkFalsy: true})
     .isLength({max: 15})
 
-const youtubeUrlValidation = body('youtubeUrl')
+const youtubeUrlValidation = body('websiteUrl')
     .trim()
     .bail()
     .exists({checkFalsy: true})
