@@ -23,28 +23,31 @@ export const bloggersService = {
             return {
                 id: blogger.id,
                 name: blogger.name,
-                youtubeUrl: blogger.youtubeUrl,
-                createdAt: blogger.createdAt
+                websiteUrl: blogger.websiteUrl,
+                createdAt: blogger.createdAt,
+                description: blogger.description
             }
         } else {
             return null
         }
 
     },
-    async createBlogger(name: string, youtubeUrl: string): Promise<Omit<bloggerDBType, "_id">> {
+    async createBlogger(name: string, websiteUrl: string, description: string): Promise<Omit<bloggerDBType, "_id">> {
         let newBlogger: bloggerDBType = {
             _id: new ObjectId(),
             id: v4(),
             name: name,
-            youtubeUrl: youtubeUrl,
+            websiteUrl: websiteUrl,
+            description: description,
             createdAt: new Date()
         }
         const createdBlogger = await bloggersRepository.createBlogger(newBlogger)
         return {
             id: createdBlogger.id,
             name: createdBlogger.name,
-            youtubeUrl: createdBlogger.youtubeUrl,
-            createdAt: createdBlogger.createdAt
+            websiteUrl: createdBlogger.websiteUrl,
+            createdAt: createdBlogger.createdAt,
+            description: createdBlogger.description
         }
     },
     async updateBlogger(bloggerId: string, name: string, youtubeUrl: string): Promise<boolean> {

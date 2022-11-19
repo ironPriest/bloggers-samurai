@@ -92,7 +92,8 @@ bloggersRouter.post('/',
     async(req: Request, res: Response) => {
     const newBlogger = await bloggersService.createBlogger(
         req.body.name,
-        req.body.youtubeUrl)
+        req.body.websiteUrl,
+        req.body.description)
     res.status(201).send(newBlogger)
 })
 bloggersRouter.post('/:bloggerId/posts',

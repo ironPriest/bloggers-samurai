@@ -3,7 +3,8 @@ import {ObjectId, WithId} from 'mongodb'
 export type bloggerDBType = WithId<{
     id: string
     name: string
-    youtubeUrl: string
+    websiteUrl: string
+    description: string
     createdAt: Date
 }>
 export type postDBType = WithId<{
