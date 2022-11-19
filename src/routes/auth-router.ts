@@ -35,8 +35,8 @@ const emailValidation = body('email')
     .isString()
     .matches('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')
 
-const doubleLoginValidation = body('login').custom(async (login,) => {
-    const user = await usersService.findByLogin(login)
+const doubleLoginValidation = body('loginOrEmail').custom(async (loginOrEmail,) => {
+    const user = await usersService.findByLoginOrEmail(loginOrEmail)
     if (user) {
         throw new Error('login already exists')
     }
@@ -75,7 +75,7 @@ const doubleResendingValidation = body('email').custom(async (email,) => {
 
 authRouter.post('/login',
     async (req: Request, res: Response) => {
-        const user = await authService.checkCredentials(req.body.login, req.body.password)
+        const user = await authService.checkCredentials(req.body.loginOrEmail, req.body.password)
         if (!user) {
             return res.sendStatus(401)
         }

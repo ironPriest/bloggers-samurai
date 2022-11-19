@@ -40,8 +40,8 @@ export const usersService = {
             return null
         }
     },
-    async findByLogin(login: string) {
-        let user = await usersRepository.findByLogin(login)
+    async findByLoginOrEmail(loginOrEmail: string) {
+        let user = await usersRepository.findByLoginOrEmail(loginOrEmail)
         if (user) {
             return user
         } else {
