@@ -7,7 +7,8 @@ export const deviceAuthSessionsRepository = {
         await  deviceAuthSessionsCollection.insertOne(deviceAuthSession)
     },
     async update(deviceId: string, newLastActiveDate: Date) {
-        await  deviceAuthSessionsCollection.updateOne({deviceId: deviceId}, {$set: {lastActiveDate: newLastActiveDate}})
+        const res = await  deviceAuthSessionsCollection.updateOne({deviceId: deviceId}, {$set: {lastActiveDate: newLastActiveDate}})
+        return res.matchedCount === 1
     },
     async getSessionByUserId(userId: ObjectId): Promise<DeviceAuthSessionType | null> {
         return await deviceAuthSessionsCollection.findOne({userId: userId})
@@ -20,7 +21,6 @@ export const deviceAuthSessionsRepository = {
     },
     async getSessions() {
         const sessions =  await deviceAuthSessionsCollection.find({}, {projection: {_id: 0, userId: 0, rtExpDate: 0}}).toArray()
-        console.log(sessions)
         return sessions
     },
     async deleteAll() {

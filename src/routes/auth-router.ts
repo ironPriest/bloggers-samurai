@@ -119,11 +119,18 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
             console.log('cant find user')
             return res.sendStatus(401)
         }
+
         await jwtUtility.addToBlackList(reqRefreshToken)
         const token = await jwtUtility.createJWT(user)
         const deviceAuthSession: DeviceAuthSessionType | null = await deviceAuthSessionsService.getSessionByUserId(user._id)
-        const refreshToken = await jwtUtility.createRefreshToken(user, deviceAuthSession!.deviceId)
-        await deviceAuthSessionsService.update(deviceAuthSession!.deviceId)
+        if (!deviceAuthSession) {
+            return res.sendStatus(404)
+        }
+        const refreshToken = await jwtUtility.createRefreshToken(user, deviceAuthSession.deviceId)
+        const updateRes = await deviceAuthSessionsService.update(deviceAuthSession.deviceId)
+        if (!updateRes) {
+            return res.status(400).send('session update failed')
+        }
         return res.status(200).cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true
