@@ -2,23 +2,22 @@ import {Request, Response, Router} from "express";
 import {deviceAuthSessionsService} from "../domain/device-auth-sessions-service";
 import {jwtUtility} from "../application/jwt-utility";
 import {deviceAuthSessionsRepository} from "../repositories/device-auth-sessions-repository";
+import {TokenDBType} from "../types/types";
+import {blacktockensRepository} from "../repositories/blacktockens-repository";
 
 export const securityDevicesRouter = Router({})
 
 securityDevicesRouter.get('/', async (req: Request, res: Response) => {
-    if (!req.cookies.refreshToken) {
-        return res.sendStatus(401)
-    }
+
     const token = req.cookies.refreshToken
-    const deviceId = await jwtUtility.getDeviceIdByToken(token)
-    if(!deviceId) {
-        console.log('can not get deviceId from rt')
-        return res.sendStatus(401)
-    }
+    if (!token) return res.sendStatus(401)
+
+    const blackToken: TokenDBType | null = await blacktockensRepository.check(token)
+    if (blackToken) return res.sendStatus(401)
+
     const userId = await jwtUtility.getUserIdByToken(token)
-    if (!userId) {
-        return res.sendStatus(401)
-    }
+    if (!userId) return res.sendStatus(401)
+
     const sessions = await deviceAuthSessionsService.getSessions(userId)
     return res.status(200).send(sessions)
 })
