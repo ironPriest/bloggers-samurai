@@ -33,6 +33,6 @@ export const jwtUtility = {
             _id: new ObjectId(),
             token: corruptedToken
         }
-        await blacktockensRepository.addToList(token)
+        return blacktockensRepository.addToList(token)
     }
 }

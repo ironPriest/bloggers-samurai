@@ -183,15 +183,15 @@ authRouter.post('/logout',async (req: Request, res: Response) => {
         const userId = await jwtUtility.getUserIdByToken(refreshToken)
         if (!userId) return res.sendStatus(401)
 
-        const user = await usersService.findById(userId)
-        if (!user) return res.sendStatus(401)
-
         const session = await deviceAuthSessionsService.getSessionByUserId(userId)
         if (!session) return res.sendStatus(401)
 
-        await deviceAuthSessionsService.deleteSession(session.deviceId, session.userId)
+        const deleteResult = await deviceAuthSessionsService.deleteSession(session.deviceId, session.userId)
+        if (!deleteResult) return res.sendStatus(400)
 
-        await jwtUtility.addToBlackList(refreshToken)
+        const addingResult = await jwtUtility.addToBlackList(refreshToken)
+        if (!addingResult) return res.sendStatus(400)
+
         return res.status(204).cookie('refreshToken', '', {
             httpOnly: true,
             secure: true

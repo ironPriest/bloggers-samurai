@@ -29,7 +29,8 @@ export const deviceAuthSessionsRepository = {
     async deleteExcept(userId: ObjectId, deviceId: string) {
         await deviceAuthSessionsCollection.deleteMany({userId: userId, deviceId: {$ne: deviceId}})
     },
-    async deleteSession(deviceId: string, userId: ObjectId) {
-        await deviceAuthSessionsCollection.deleteOne({deviceId, userId})
+    async deleteSession(deviceId: string, userId: ObjectId): Promise<Boolean> {
+        let result = await deviceAuthSessionsCollection.deleteOne({deviceId, userId})
+        return result.deletedCount === 1
     }
 }

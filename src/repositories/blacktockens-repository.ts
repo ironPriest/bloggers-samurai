@@ -4,7 +4,8 @@ import {blacktockensCollection} from "./db";
 
 export const blacktockensRepository = {
     async addToList(token: TokenDBType) {
-        await blacktockensCollection.insertOne(token)
+        let res = await blacktockensCollection.insertOne(token)
+        return res.acknowledged
     },
     async check(token: string): Promise<TokenDBType | null> {
         let res = await blacktockensCollection.findOne({token: token})
