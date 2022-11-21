@@ -64,7 +64,7 @@ const doubleConfirmValidation = body('code').custom(async (code,) => {
 const doubleResendingValidation = body('email').custom(async (email,) => {
     const user = await usersService.findByEmail(email)
     if (user) {
-        const emailConfirmation = await emailConfirmationRepository.findByUserId(user?.id)
+        const emailConfirmation = await emailConfirmationRepository.findByUserId(user.id)
         if (emailConfirmation!.isConfirmed) {
             throw new Error('already confirmed')
         } else return true
@@ -86,7 +86,6 @@ authRouter.post('/login',
         const deviceId = deviceAuthSession.deviceId
         const token = await jwtUtility.createJWT(user)
         const refreshToken = await jwtUtility.createRefreshToken(user, deviceId)
-        console.log('rt --->', refreshToken)
         return res.status(200).cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true
@@ -129,7 +128,7 @@ authRouter.post('/refresh-token', async (req: Request, res: Response) => {
         const refreshToken = await jwtUtility.createRefreshToken(user, deviceAuthSession.deviceId)
         const updateRes = await deviceAuthSessionsService.update(deviceAuthSession.deviceId)
         if (!updateRes) {
-            return res.status(400).send('session update failed')
+            return res.sendStatus(400)
         }
         return res.status(200).cookie('refreshToken', refreshToken, {
             httpOnly: true,

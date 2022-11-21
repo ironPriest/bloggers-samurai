@@ -25,8 +25,8 @@ export const deviceAuthSessionsService = {
     async getSessionByUserId(userId: ObjectId): Promise<DeviceAuthSessionType | null> {
         return await deviceAuthSessionsRepository.getSessionByUserId(userId)
     },
-    async getSessions() {
-        return await deviceAuthSessionsRepository.getSessions()
+    async getSessions(userId: ObjectId) {
+        return await deviceAuthSessionsRepository.getSessions(userId)
     },
     async deleteExcept(userId: ObjectId, deviceId: string) {
         await deviceAuthSessionsRepository.deleteExcept(userId, deviceId)
