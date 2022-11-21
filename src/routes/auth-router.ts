@@ -172,22 +172,25 @@ authRouter.post('/registration-email-resending',
         return res.sendStatus(204)
     })
 
-authRouter.post('/logout',
-    async (req: Request, res: Response) => {
+authRouter.post('/logout',async (req: Request, res: Response) => {
+
         const refreshToken = req.cookies.refreshToken
-        if (!refreshToken) {
-            return res.sendStatus(401)
-        }
-        // token check
+        if (!refreshToken) return res.sendStatus(401)
+
         const blackToken: TokenDBType | null = await blacktockensRepository.check(refreshToken)
-        //console.log('blackToken ----->', blackToken)
         if (blackToken) return res.sendStatus(401)
+
         const userId = await jwtUtility.getUserIdByToken(refreshToken)
         if (!userId) return res.sendStatus(401)
+
         const user = await usersService.findById(userId)
         if (!user) return res.sendStatus(401)
+
         const session = await deviceAuthSessionsService.getSessionByUserId(userId)
-        await deviceAuthSessionsService.deleteByDeviceId(session!.deviceId)
+        if (!session) return res.sendStatus(401)
+
+        await deviceAuthSessionsService.deleteSession(session.deviceId, session.userId)
+
         await jwtUtility.addToBlackList(refreshToken)
         return res.status(204).cookie('refreshToken', '', {
             httpOnly: true,
