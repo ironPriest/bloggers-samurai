@@ -4,6 +4,7 @@ import {jwtUtility} from "../application/jwt-utility";
 import {deviceAuthSessionsRepository} from "../repositories/device-auth-sessions-repository";
 import {TokenDBType} from "../types/types";
 import {blacktockensRepository} from "../repositories/blacktockens-repository";
+import {Logger} from "mongodb";
 
 export const securityDevicesRouter = Router({})
 
@@ -15,29 +16,37 @@ securityDevicesRouter.get('/', async (req: Request, res: Response) => {
     const blackToken: TokenDBType | null = await blacktockensRepository.check(token)
     if (blackToken) return res.sendStatus(401)
 
+    console.log('blackToken: ', blackToken)
+
     const userId = await jwtUtility.getUserIdByToken(token)
+
+    console.log('userId: ', userId)
     if (!userId) return res.sendStatus(401)
 
     const checkSession = await deviceAuthSessionsRepository.getSessionByUserId(userId)
+
+    console.log('çheckSession: ', checkSession)
     if (!checkSession) return res.sendStatus(401)
 
     const sessions = await deviceAuthSessionsService.getSessions(userId)
+
+    console.log('sessions: ', sessions)
     return res.status(200).send(sessions)
 })
 securityDevicesRouter.delete('/', async (req: Request, res: Response) => {
-    if (!req.cookies.refreshToken) {
-        return res.sendStatus(401)
-    }
+
+    if (!req.cookies.refreshToken) return res.sendStatus(401)
+
     const token = req.cookies.refreshToken
+
     const userId = await jwtUtility.getUserIdByToken(token)
-    if(!userId) {
-        return res.sendStatus(404)
-    }
+    if(!userId) return res.sendStatus(404)
+
     const deviceId = await jwtUtility.getDeviceIdByToken(token)
-    if(!deviceId) {
-        return res.sendStatus(404)
-    }
+    if(!deviceId) return res.sendStatus(404)
+
     await deviceAuthSessionsService.deleteExcept(userId, deviceId)
+
     return res.sendStatus(204)
 })
 securityDevicesRouter.delete('/:deviceId', async (req: Request, res: Response) => {
