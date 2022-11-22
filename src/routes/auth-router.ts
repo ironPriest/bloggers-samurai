@@ -3,7 +3,7 @@ import {authService} from "../domain/auth-service";
 import {jwtUtility} from "../application/jwt-utility";
 import {emailAdapter} from "../adapters/email-adapter";
 import {emailService} from "../domain/email-service";
-import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
+import {inputValidationMiddleware, rateLimiter} from "../middlewares/input-validation-middleware";
 import {body, header} from "express-validator";
 import {usersService} from "../domain/users-service";
 import {emailConfirmationRepository} from "../repositories/emailconfirmation-repository";
@@ -151,6 +151,7 @@ authRouter.post(
     doubleLoginValidation,
     doubleEmailValidation,
     inputValidationMiddleware,
+    rateLimiter,
     async (req: Request, res: Response) => {
         await authService.createUser(
             req.body.login,

@@ -1,5 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {validationResult} from "express-validator";
+import rateLimit from 'express-rate-limit';
 
 export const inputValidationMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -36,3 +37,11 @@ export const contentChecker = (contentType: string) => (req: Request, res: Respo
         res.status(400).send('Bad content type')
     }
 }
+
+export const rateLimiter = rateLimit({
+    windowMs: 10000,
+    max: 4,
+    message: 'You have exceeded the 100 requests in 24 hrs limit!',
+    standardHeaders: true,
+    legacyHeaders: false,
+});
