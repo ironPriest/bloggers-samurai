@@ -74,6 +74,7 @@ const doubleResendingValidation = body('email').custom(async (email,) => {
 })
 
 authRouter.post('/login',
+    rateLimiter,
     async (req: Request, res: Response) => {
         const user = await authService.checkCredentials(req.body.loginOrEmail, req.body.password)
         if (!user) {
