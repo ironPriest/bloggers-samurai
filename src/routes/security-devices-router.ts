@@ -12,11 +12,14 @@ securityDevicesRouter.get('/', async (req: Request, res: Response) => {
     const token = req.cookies.refreshToken
     if (!token) return res.sendStatus(401)
 
-    const blackToken: TokenDBType | null = await blacktockensRepository.check(token)
-    if (blackToken) return res.sendStatus(401)
+    // const blackToken: TokenDBType | null = await blacktockensRepository.check(token)
+    // if (blackToken) return res.sendStatus(401)
 
     const userId = await jwtUtility.getUserIdByToken(token)
     if (!userId) return res.sendStatus(401)
+
+    const checkSession = await deviceAuthSessionsRepository.getSessionByUserId(userId)
+    if (!checkSession) return res.sendStatus(401)
 
     const sessions = await deviceAuthSessionsService.getSessions(userId)
     return res.status(200).send(sessions)
