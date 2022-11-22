@@ -40,8 +40,8 @@ export const contentChecker = (contentType: string) => (req: Request, res: Respo
 
 export const rateLimiter = rateLimit({
     windowMs: 10000,
-    max: 4,
-    message: 'You have exceeded the 100 requests in 24 hrs limit!',
+    max: 5,
+    message: 'You have exceeded the 5 requests in 10 s limit!',
     standardHeaders: true,
     legacyHeaders: false,
 });
