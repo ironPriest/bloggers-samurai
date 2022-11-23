@@ -171,6 +171,7 @@ authRouter.post('/registration-confirmation',
     })
 
 authRouter.post('/registration-email-resending',
+    rateLimiter,
     doubleResendingValidation,
     inputValidationMiddleware,
     async (req: Request, res: Response) => {
