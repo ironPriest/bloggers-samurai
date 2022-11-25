@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {validationResult} from "express-validator";
-import rateLimit from 'express-rate-limit';
+import {differenceInSeconds} from "date-fns";
 
 export const inputValidationMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -38,7 +38,13 @@ export const contentChecker = (contentType: string) => (req: Request, res: Respo
     }
 }
 
-export const rateLimiter = rateLimit({
-    windowMs: 10000,
-    max: 5,
-});
+let timeStamps: Date[] = []
+export  const rateLimiter = (req: Request, res: Response, next: NextFunction) => {
+    timeStamps.push(new Date())
+    //debugger
+    if (differenceInSeconds(timeStamps[6], timeStamps[0]) > 10) timeStamps.splice(0)
+
+    if (timeStamps.length > 5) return res.sendStatus(429)
+
+    next()
+}

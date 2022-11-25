@@ -77,19 +77,18 @@ authRouter.post('/login',
     rateLimiter,
     async (req: Request, res: Response) => {
         const user = await authService.checkCredentials(req.body.loginOrEmail, req.body.password)
-        if (!user) {
-            return res.sendStatus(401)
-        }
+        if (!user) return res.sendStatus(401)
+        const userId = user._id
+
         const ip = req.ip
         const title = req.headers["user-agent"]!
-        const userId = user._id
+
         const deviceAuthSession: DeviceAuthSessionType =  await deviceAuthSessionsService.create(ip, title, userId)
-
-        debugger
-
         const deviceId = deviceAuthSession.deviceId
+
         const token = await jwtUtility.createJWT(user)
         const refreshToken = await jwtUtility.createRefreshToken(user, deviceId)
+
         return res.status(200).cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: true
@@ -152,7 +151,6 @@ authRouter.post(
     doubleLoginValidation,
     doubleEmailValidation,
     inputValidationMiddleware,
-    rateLimiter,
     async (req: Request, res: Response) => {
         await authService.createUser(
             req.body.login,
@@ -162,7 +160,6 @@ authRouter.post(
     })
 
 authRouter.post('/registration-confirmation',
-    rateLimiter,
     doubleConfirmValidation,
     inputValidationMiddleware,
     async (req: Request, res: Response) => {
@@ -171,7 +168,6 @@ authRouter.post('/registration-confirmation',
     })
 
 authRouter.post('/registration-email-resending',
-    rateLimiter,
     doubleResendingValidation,
     inputValidationMiddleware,
     async (req: Request, res: Response) => {

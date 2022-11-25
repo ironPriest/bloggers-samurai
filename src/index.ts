@@ -12,11 +12,10 @@ import {securityDevicesRouter} from "./routes/security-devices-router";
 
 import {runDb} from "./repositories/db";
 
-
-
 const app = express()
 const port = process.env.PORT || 5000
 app.use(cors())
+app.set('trust proxy', true)
 const parserMiddleware = express.json()
 app.use(parserMiddleware)
 app.use(cookieParser())
@@ -32,7 +31,7 @@ app.use('/comments', commentsRouter)
 app.use('/testing', testingRouter)
 app.use('/security/devices', securityDevicesRouter)
 
-app.set('trust proxy', true)
+
 
 const startApp = async () => {
     await runDb()
