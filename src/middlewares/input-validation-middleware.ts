@@ -11,10 +11,9 @@ export const inputValidationMiddleware = (req: Request, res: Response, next: Nex
                 field: e.param
             }
         })
-        if (errorsHeap[0].field === 'bloggerId') {
-            res.status(404).json({errorsMessages: errorsHeap})
-            return
-        }
+
+        if (errorsHeap[0].field === 'bloggerId') return res.status(404).json({errorsMessages: errorsHeap})
+
         res.status(400).json({errorsMessages: errorsHeap});
         return
     } else {
@@ -51,7 +50,7 @@ export  const registrationRateLimiter = (req: Request, res: Response, next: Next
 
 let loginTimeStamps: Date[] = []
 export  const loginRateLimiter = (req: Request, res: Response, next: NextFunction) => {
-    registrationTimeStamps.push(new Date())
+    loginTimeStamps.push(new Date())
 
     if (differenceInSeconds(loginTimeStamps[6], loginTimeStamps[0]) > 10) loginTimeStamps.splice(0)
 
