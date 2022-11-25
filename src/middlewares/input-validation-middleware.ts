@@ -38,13 +38,24 @@ export const contentChecker = (contentType: string) => (req: Request, res: Respo
     }
 }
 
-let timeStamps: Date[] = []
-export  const rateLimiter = (req: Request, res: Response, next: NextFunction) => {
-    timeStamps.push(new Date())
-    //debugger
-    if (differenceInSeconds(timeStamps[6], timeStamps[0]) > 10) timeStamps.splice(0)
+let registrationTimeStamps: Date[] = []
+export  const registrationRateLimiter = (req: Request, res: Response, next: NextFunction) => {
+    registrationTimeStamps.push(new Date())
 
-    if (timeStamps.length > 5) return res.sendStatus(429)
+    if (differenceInSeconds(registrationTimeStamps[6], registrationTimeStamps[0]) > 10) registrationTimeStamps.splice(0)
+
+    if (registrationTimeStamps.length > 5) return res.sendStatus(429)
+
+    next()
+}
+
+let loginTimeStamps: Date[] = []
+export  const loginRateLimiter = (req: Request, res: Response, next: NextFunction) => {
+    registrationTimeStamps.push(new Date())
+
+    if (differenceInSeconds(loginTimeStamps[6], loginTimeStamps[0]) > 10) loginTimeStamps.splice(0)
+
+    if (loginTimeStamps.length > 5) return res.sendStatus(429)
 
     next()
 }
