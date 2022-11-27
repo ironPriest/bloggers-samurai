@@ -48,3 +48,7 @@ export type DeviceAuthSessionType = WithId<{
     userId: ObjectId
     rtExpDate: Date
 }>
+export type LoginTimeStampType = WithId<{
+    ip: string
+    timeStamp: Date
+}>

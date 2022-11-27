@@ -1,6 +1,10 @@
 import {NextFunction, Request, Response} from "express";
 import {validationResult} from "express-validator";
 import {differenceInSeconds} from "date-fns";
+import {loginTimeStampsRepository} from "../repositories/login-time-stamps-repository";
+import {ObjectId} from "mongodb";
+import {loginTimeStampsCollection} from "../repositories/db";
+import {LoginTimeStampType} from "../types/types";
 
 export const inputValidationMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -48,13 +52,24 @@ export  const registrationRateLimiter = (req: Request, res: Response, next: Next
     next()
 }
 
-let loginTimeStamps: Date[] = []
-export  const loginRateLimiter = (req: Request, res: Response, next: NextFunction) => {
-    loginTimeStamps.push(new Date())
+export  const loginRateLimiter = async (req: Request, res: Response, next: NextFunction) => {
 
-    if (differenceInSeconds(loginTimeStamps[6], loginTimeStamps[0]) > 10) loginTimeStamps.splice(0)
+    //TODO check result
+    await loginTimeStampsRepository.add({
+        _id: new ObjectId(),
+        ip: req.ip,
+        timeStamp: new Date()
+    })
 
-    if (loginTimeStamps.length > 5) return res.sendStatus(429)
+    let lastStamp = await loginTimeStampsRepository.getLastStamp(req.ip)
+    let firstStamp = await loginTimeStampsRepository.getFirstStamp(req.ip)
+
+    if (differenceInSeconds(lastStamp[0].timeStamp, firstStamp[0].timeStamp) > 10) {
+        await loginTimeStampsRepository.deleteStamps(req.ip)
+    }
+
+    let timeStampsCounter = await loginTimeStampsRepository.getTimeStampsQuantity(req.ip)
+    if (timeStampsCounter > 5) return res.sendStatus(429)
 
     next()
 }
