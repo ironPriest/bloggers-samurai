@@ -61,12 +61,15 @@ export  const loginRateLimiter = async (req: Request, res: Response, next: NextF
         timeStamp: new Date()
     })
 
-    let lastStamp = await loginTimeStampsRepository.getLastStamp(req.ip)
-    let firstStamp = await loginTimeStampsRepository.getFirstStamp(req.ip)
+    // let lastStamp = await loginTimeStampsRepository.getLastStamp(req.ip)
+    // let firstStamp = await loginTimeStampsRepository.getFirstStamp(req.ip)
+    //
+    // if (differenceInSeconds(lastStamp[0].timeStamp, firstStamp[0].timeStamp) > 10) {
+    //     await loginTimeStampsRepository.deleteStamps(req.ip)
+    // }
 
-    if (differenceInSeconds(lastStamp[0].timeStamp, firstStamp[0].timeStamp) > 10) {
-        await loginTimeStampsRepository.deleteStamps(req.ip)
-    }
+    //TODO check result
+    await loginTimeStampsRepository.cleanStamps(req.ip)
 
     let timeStampsCounter = await loginTimeStampsRepository.getTimeStampsQuantity(req.ip)
     if (timeStampsCounter > 5) return res.sendStatus(429)
