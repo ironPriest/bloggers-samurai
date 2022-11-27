@@ -175,7 +175,6 @@ authRouter.post('/registration-confirmation',
 authRouter.post('/registration-email-resending',
     doubleResendingValidation,
     inputValidationMiddleware,
-    loginRateLimiter,
     async (req: Request, res: Response) => {
         await authService.confirmationResend(req.body.email)
         return res.sendStatus(204)
