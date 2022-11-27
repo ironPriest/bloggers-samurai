@@ -5,7 +5,7 @@ import {emailAdapter} from "../adapters/email-adapter";
 import {emailService} from "../domain/email-service";
 import {
     inputValidationMiddleware, loginRateLimiter,
-    registrationRateLimiter
+    registrationRateLimiter, resendingRateLimiter
 } from "../middlewares/input-validation-middleware";
 import {body, header} from "express-validator";
 import {usersService} from "../domain/users-service";
@@ -174,6 +174,7 @@ authRouter.post('/registration-confirmation',
 authRouter.post('/registration-email-resending',
     doubleResendingValidation,
     inputValidationMiddleware,
+    resendingRateLimiter,
     async (req: Request, res: Response) => {
         await authService.confirmationResend(req.body.email)
         return res.sendStatus(204)

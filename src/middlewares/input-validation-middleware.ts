@@ -5,6 +5,7 @@ import {loginTimeStampsRepository} from "../repositories/login-time-stamps-repos
 import {ObjectId} from "mongodb";
 import {loginTimeStampsCollection} from "../repositories/db";
 import {LoginTimeStampType} from "../types/types";
+import {resendingTimeStampsRepository} from "../repositories/resending-time-stamp-repository";
 
 export const inputValidationMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -70,6 +71,28 @@ export  const loginRateLimiter = async (req: Request, res: Response, next: NextF
     await loginTimeStampsRepository.cleanStamps(req.ip)
 
     let timeStampsCounter = await loginTimeStampsRepository.getTimeStampsQuantity(req.ip)
+    if (timeStampsCounter > 5) return res.sendStatus(429)
+
+    next()
+}
+
+export  const resendingRateLimiter = async (req: Request, res: Response, next: NextFunction) => {
+    //TODO check result
+    await resendingTimeStampsRepository.add({
+        _id: new ObjectId(),
+        ip: req.ip,
+        timeStamp: new Date()
+    })
+    // let lastStamp = await loginTimeStampsRepository.getLastStamp(req.ip)
+    // let firstStamp = await loginTimeStampsRepository.getFirstStamp(req.ip)
+    //
+    // if (differenceInSeconds(lastStamp[0].timeStamp, firstStamp[0].timeStamp) > 10) {
+    //     await loginTimeStampsRepository.deleteStamps(req.ip)
+    // }
+    //TODO check result
+    await resendingTimeStampsRepository.cleanStamps(req.ip)
+
+    let timeStampsCounter = await resendingTimeStampsRepository.getTimeStampsQuantity(req.ip)
     if (timeStampsCounter > 5) return res.sendStatus(429)
 
     next()
