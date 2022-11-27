@@ -41,6 +41,7 @@ export const contentChecker = (contentType: string) => (req: Request, res: Respo
     }
 }
 
+//TODO shitcode goes here
 let registrationTimeStamps: Date[] = []
 export  const registrationRateLimiter = (req: Request, res: Response, next: NextFunction) => {
     registrationTimeStamps.push(new Date())
@@ -53,21 +54,18 @@ export  const registrationRateLimiter = (req: Request, res: Response, next: Next
 }
 
 export  const loginRateLimiter = async (req: Request, res: Response, next: NextFunction) => {
-
     //TODO check result
     await loginTimeStampsRepository.add({
         _id: new ObjectId(),
         ip: req.ip,
         timeStamp: new Date()
     })
-
     // let lastStamp = await loginTimeStampsRepository.getLastStamp(req.ip)
     // let firstStamp = await loginTimeStampsRepository.getFirstStamp(req.ip)
     //
     // if (differenceInSeconds(lastStamp[0].timeStamp, firstStamp[0].timeStamp) > 10) {
     //     await loginTimeStampsRepository.deleteStamps(req.ip)
     // }
-
     //TODO check result
     await loginTimeStampsRepository.cleanStamps(req.ip)
 

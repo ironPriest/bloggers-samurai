@@ -154,7 +154,8 @@ authRouter.post(
     doubleLoginValidation,
     doubleEmailValidation,
     inputValidationMiddleware,
-    registrationRateLimiter,
+    //registrationRateLimiter,
+    loginRateLimiter,
     async (req: Request, res: Response) => {
         await authService.createUser(
             req.body.login,
