@@ -48,12 +48,7 @@ export type DeviceAuthSessionType = WithId<{
     userId: ObjectId
     rtExpDate: Date
 }>
-//TODO only one TimeStampType needed
-export type LoginTimeStampType = WithId<{
-    ip: string
-    timeStamp: Date
-}>
-export type ResendingTimeStampType = WithId<{
+export type TimeStampType = WithId<{
     ip: string
     timeStamp: Date
 }>
