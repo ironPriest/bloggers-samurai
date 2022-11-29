@@ -9,7 +9,7 @@ export const timeStampsRepository = {
     async getTimeStampsQuantity(route: string, ip: string) {
         return await timeStampsCollection.countDocuments({route, ip})
     },
-    async cleanStamps(timeStamp: Date, ip: string) {
-        await timeStampsCollection.deleteMany({timeStamp: {$lt: sub(timeStamp, {seconds: 10})}, ip})
+    async cleanStamps(route: string, ip: string, timeStamp: Date) {
+        await timeStampsCollection.deleteMany({route, ip, timeStamp: {$lt: sub(timeStamp, {seconds: 10})}})
     }
 }

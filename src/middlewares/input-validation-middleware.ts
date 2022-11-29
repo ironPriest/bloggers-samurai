@@ -39,15 +39,17 @@ export const contentChecker = (contentType: string) => (req: Request, res: Respo
 }
 
 export  const rateLimiter = async (req: Request, res: Response, next: NextFunction) => {
-    //TODO check result
-    await timeStampsRepository.add({
+
+    const timeStamp = {
         _id: new ObjectId(),
         route: req.route.path,
         ip: req.ip,
         timeStamp: new Date()
-    })
+    }
     //TODO check result
-    await timeStampsRepository.cleanStamps(req.route.path, req.ip)
+    await timeStampsRepository.add(timeStamp)
+    //TODO check result
+    await timeStampsRepository.cleanStamps(req.route.path, req.ip, timeStamp.timeStamp)
 
     let timeStampsCounter = await timeStampsRepository.getTimeStampsQuantity(req.route.path, req.ip)
     if (timeStampsCounter > 5) return res.sendStatus(429)
