@@ -1,20 +1,14 @@
 import {Request, Response, Router} from "express";
+import {DeviceAuthSessionType, TokenDBType} from "../types/types";
 import {authService} from "../domain/auth-service";
 import {jwtUtility} from "../application/jwt-utility";
-import {emailAdapter} from "../adapters/email-adapter";
-import {emailService} from "../domain/email-service";
-import {
-    inputValidationMiddleware, loginRateLimiter,
-    registrationRateLimiter, resendingRateLimiter
-} from "../middlewares/input-validation-middleware";
-import {body, header} from "express-validator";
 import {usersService} from "../domain/users-service";
 import {emailConfirmationRepository} from "../repositories/emailconfirmation-repository";
-import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
-import {DeviceAuthSessionType, TokenDBType, UserDBType} from "../types/types";
 import {blacktockensRepository} from "../repositories/blacktockens-repository";
 import {deviceAuthSessionsService} from "../domain/device-auth-sessions-service";
-
+import {inputValidationMiddleware, rateLimiter} from "../middlewares/input-validation-middleware";
+import {body, header} from "express-validator";
+import {bearerAuthMiddleware} from "../middlewares/bearer-auth-middleware";
 
 export const authRouter = Router({})
 
@@ -77,7 +71,7 @@ const doubleResendingValidation = body('email').custom(async (email,) => {
 })
 
 authRouter.post('/login',
-    loginRateLimiter,
+    rateLimiter,
     async (req: Request, res: Response) => {
         const user = await authService.checkCredentials(req.body.loginOrEmail, req.body.password)
         if (!user) return res.sendStatus(401)
@@ -154,7 +148,7 @@ authRouter.post(
     doubleLoginValidation,
     doubleEmailValidation,
     inputValidationMiddleware,
-    registrationRateLimiter,
+    rateLimiter,
     async (req: Request, res: Response) => {
         await authService.createUser(
             req.body.login,
@@ -166,6 +160,7 @@ authRouter.post(
 authRouter.post('/registration-confirmation',
     doubleConfirmValidation,
     inputValidationMiddleware,
+    rateLimiter,
     async (req: Request, res: Response) => {
         await authService.confirm(req.body.code)
         return res.sendStatus(204)
@@ -174,7 +169,7 @@ authRouter.post('/registration-confirmation',
 authRouter.post('/registration-email-resending',
     doubleResendingValidation,
     inputValidationMiddleware,
-    resendingRateLimiter,
+    rateLimiter,
     async (req: Request, res: Response) => {
         await authService.confirmationResend(req.body.email)
         return res.sendStatus(204)

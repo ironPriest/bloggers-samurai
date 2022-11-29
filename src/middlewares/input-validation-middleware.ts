@@ -1,10 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import {ObjectId} from "mongodb";
-import {differenceInSeconds} from "date-fns";
 import {validationResult} from "express-validator";
-import {loginTimeStampsRepository} from "../repositories/login-time-stamps-repository";
-import {resendingTimeStampsRepository} from "../repositories/resending-time-stamp-repository";
-import {registrationTimeStampsRepository} from "../repositories/registration-time-stamps-repository";
+import {timeStampsRepository} from "../repositories/time-stamps-repository";
 
 export const inputValidationMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -41,62 +38,18 @@ export const contentChecker = (contentType: string) => (req: Request, res: Respo
     }
 }
 
-//TODO shitcode goes here
-
-// let registrationTimeStamps: Date[] = []
-// export  const registrationRateLimiter = (req: Request, res: Response, next: NextFunction) => {
-//     registrationTimeStamps.push(new Date())
-//
-//     if (differenceInSeconds(registrationTimeStamps[6], registrationTimeStamps[0]) > 10) registrationTimeStamps.splice(0)
-//
-//     if (registrationTimeStamps.length > 5) return res.sendStatus(429)
-//
-//     next()
-// }
-
-export  const registrationRateLimiter = async (req: Request, res: Response, next: NextFunction) => {
+export  const rateLimiter = async (req: Request, res: Response, next: NextFunction) => {
     //TODO check result
-    await registrationTimeStampsRepository.add({
+    await timeStampsRepository.add({
         _id: new ObjectId(),
+        route: req.route.path,
         ip: req.ip,
         timeStamp: new Date()
     })
     //TODO check result
-    await registrationTimeStampsRepository.cleanStamps(req.ip)
+    await timeStampsRepository.cleanStamps(req.route.path, req.ip)
 
-    let timeStampsCounter = await registrationTimeStampsRepository.getTimeStampsQuantity(req.ip)
-    if (timeStampsCounter > 5) return res.sendStatus(429)
-
-    next()
-}
-
-export  const loginRateLimiter = async (req: Request, res: Response, next: NextFunction) => {
-    //TODO check result
-    await loginTimeStampsRepository.add({
-        _id: new ObjectId(),
-        ip: req.ip,
-        timeStamp: new Date()
-    })
-    //TODO check result
-    await loginTimeStampsRepository.cleanStamps(req.ip)
-
-    let timeStampsCounter = await loginTimeStampsRepository.getTimeStampsQuantity(req.ip)
-    if (timeStampsCounter > 5) return res.sendStatus(429)
-
-    next()
-}
-
-export  const resendingRateLimiter = async (req: Request, res: Response, next: NextFunction) => {
-    //TODO check result
-    await resendingTimeStampsRepository.add({
-        _id: new ObjectId(),
-        ip: req.ip,
-        timeStamp: new Date()
-    })
-    //TODO check result
-    await resendingTimeStampsRepository.cleanStamps(req.ip)
-
-    let timeStampsCounter = await resendingTimeStampsRepository.getTimeStampsQuantity(req.ip)
+    let timeStampsCounter = await timeStampsRepository.getTimeStampsQuantity(req.route.path, req.ip)
     if (timeStampsCounter > 5) return res.sendStatus(429)
 
     next()

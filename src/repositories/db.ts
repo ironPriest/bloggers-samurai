@@ -23,9 +23,7 @@ export const commentsCollection = db.collection<CommentDBType>('comments')
 export const emailConfirmationsCollection = db.collection<EmailConfirmationDBType>('confirmations')
 export const blacktockensCollection = db.collection<TokenDBType>('tokenBlackList')
 export const deviceAuthSessionsCollection = db.collection<DeviceAuthSessionType>('deviceAuthSessions')
-export const registrationTimeStampsCollection = db.collection<TimeStampType>('registrationTimeStamps')
-export const loginTimeStampsCollection = db.collection<TimeStampType>('loginTimeStamps')
-export const resendingTimeStampsCollection = db.collection<TimeStampType>('loginTimeStamps')
+export const timeStampsCollection = db.collection<TimeStampType>('timeStamps')
 
 export async function runDb() {
     try {

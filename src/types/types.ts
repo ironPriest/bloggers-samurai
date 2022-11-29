@@ -49,6 +49,7 @@ export type DeviceAuthSessionType = WithId<{
     rtExpDate: Date
 }>
 export type TimeStampType = WithId<{
+    route: string
     ip: string
     timeStamp: Date
 }>
