@@ -15,7 +15,7 @@ export const inputValidationMiddleware = (req: Request, res: Response, next: Nex
 
         if (errorsHeap[0].field === 'bloggerId') return res.status(404).json({errorsMessages: errorsHeap})
 
-        //res.status(400).json({errorsMessages: errorsHeap});
+        res.status(400).json({errorsMessages: errorsHeap});
         return
     } else {
         next()

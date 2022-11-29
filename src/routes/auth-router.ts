@@ -159,8 +159,9 @@ authRouter.post(
 
 authRouter.post('/registration-confirmation',
     doubleConfirmValidation,
-    inputValidationMiddleware,
     rateLimiter,
+    inputValidationMiddleware,
+
     async (req: Request, res: Response) => {
         await authService.confirm(req.body.code)
         return res.sendStatus(204)
